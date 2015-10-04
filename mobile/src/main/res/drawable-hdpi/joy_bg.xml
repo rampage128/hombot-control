@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="ring"
+
+            android:innerRadiusRatio="4"
+            android:thicknessRatio="4"
+            android:useLevel="false">
+
+            <stroke android:width="3dp" android:color="#ffffff" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+    <item android:gravity="left|center_vertical" android:left="16dp">
+        <bitmap
+            android:src="@drawable/ic_keyboard_arrow_left_white_48dp"
+            android:tileMode="disabled"
+            android:gravity="left"
+            android:width="48dp"
+            android:height="48dp" />
+    </item>
+    <item android:gravity="right|center_vertical" android:right="16dp">
+        <bitmap
+            android:src="@drawable/ic_keyboard_arrow_right_white_48dp"
+            android:tileMode="disabled"
+            android:gravity="right"
+            android:width="48dp"
+            android:height="48dp" />
+    </item>
+    <item android:gravity="top|center_horizontal" android:top="16dp">
+        <bitmap
+            android:src="@drawable/ic_keyboard_arrow_up_white_48dp"
+            android:tileMode="disabled"
+            android:gravity="top"
+            android:width="48dp"
+            android:height="48dp" />
+    </item>
+    <item android:gravity="bottom|center_horizontal" android:bottom="16dp">
+        <bitmap
+            android:src="@drawable/ic_keyboard_arrow_down_white_48dp"
+            android:tileMode="disabled"
+            android:gravity="bottom"
+            android:width="48dp"
+            android:height="48dp" />
+    </item>
+</layer-list>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Hombot Control</string>
+
+    <string name="section_status">Status</string>
+    <string name="section_joy">Control</string>
+    <string name="section_schedule">Schedule</string>
+
+    <string name="bot_address">Bot IP-Address</string>
+
+    <string name="status_offline">Offline</string>
+    <string name="status_standby">Standby</string>
+    <string name="status_charging">Charging</string>
+    <string name="status_undocking">Undocking</string>
+    <string name="status_docking">Docking</string>
+    <string name="status_working">Working</string>
+    <string name="status_pause">Pause</string>
+    <string name="status_homing">Homing</string>
+
+    <string name="command_turbo">Turbo</string>
+    <string name="command_mode">Mode</string>
+    <string name="command_home">Home</string>
+    <string name="command_repeat">Repeat</string>
+    <string name="command_start">Start</string>
+    <string name="command_pause">Pause</string>
+
+    <string name="joycenter">Stop\nOK</string>
+
+    <string name="command_myspace">My Space</string>
+    <string name="command_spiral">Spiral</string>
+
+    <string-array name="schedule_modes">
+        <item>zigzag</item>
+        <item>cellbycell</item>
+    </string-array>
+    <string-array name="weekdays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

@@ -1,12 +1,14 @@
 package de.jlab.android.hombot.sections;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import de.jlab.android.hombot.MainActivity;
+import de.jlab.android.hombot.NavigationDrawerFragment;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.sections.schedule.ScheduleItem;
@@ -35,11 +37,11 @@ public class ScheduleSection extends SectionFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_section_schedule, container, false);
 
-        LinearLayout schedule = (LinearLayout)view.findViewById(R.id.schedule);
+        LinearLayout schedule = (LinearLayout) view.findViewById(R.id.schedule);
 
         for (int i = 0; i < 7; i++) {
             ScheduleItem item = ScheduleItem.newInstance(i);
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.schedule, item, null).commit();
         }
 

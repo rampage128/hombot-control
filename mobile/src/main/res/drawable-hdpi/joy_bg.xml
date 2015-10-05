@@ -8,7 +8,7 @@
             android:thicknessRatio="4"
             android:useLevel="false">
 
-            <stroke android:width="3dp" android:color="#ffffff" />
+            <stroke android:width="2dp" android:color="#ffffff" />
             <solid android:color="#00000000" />
         </shape>
     </item>

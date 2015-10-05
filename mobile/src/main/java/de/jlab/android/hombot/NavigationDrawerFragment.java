@@ -5,13 +5,14 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.res.Resources;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -53,6 +54,18 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static final String PREF_BOT_IP = "bot_ip";
 
+    private static class ViewHolder {
+        TextView botName;
+        TextView botVersion;
+        EditText botAddress;
+        ListView drawerListView;
+        DrawerLayout drawerLayout;
+        View container;
+        Toolbar windowToolbar;
+    }
+
+    private ViewHolder mViewHolder;
+
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
@@ -62,10 +75,6 @@ public class NavigationDrawerFragment extends Fragment {
      * Helper component that ties the action bar to the navigation drawer.
      */
     private ActionBarDrawerToggle mDrawerToggle;
-
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
-    private View mFragmentContainerView;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -84,19 +93,11 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
         mBotAddress = sp.getString(PREF_BOT_IP, null);
-
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
-
-        // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
     }
 
     public void statusUpdate(HombotStatus status) {
-        ((TextView)getView().findViewById(R.id.bot_name)).setText(status.getNickname());
-        ((TextView)getView().findViewById(R.id.bot_version)).setText(status.getVersion());
+        mViewHolder.botName.setText(status.getNickname());
+        mViewHolder.botVersion.setText(status.getVersion());
     }
 
     @Override
@@ -113,11 +114,24 @@ public class NavigationDrawerFragment extends Fragment {
         View view = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
 
-        EditText botIPField = (EditText) view.findViewById(R.id.bot_address);
+        mViewHolder                 = new ViewHolder();
+        mViewHolder.botName         = (TextView) view.findViewById(R.id.bot_name);
+        mViewHolder.botVersion      = (TextView) view.findViewById(R.id.bot_version);
+        mViewHolder.botAddress      = (EditText) view.findViewById(R.id.bot_address);
+        mViewHolder.drawerListView = (ListView) view.findViewById(R.id.drawer_list);
+        mViewHolder.windowToolbar   = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        if (savedInstanceState != null) {
+            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mFromSavedInstanceState = true;
+        }
+        // Select either the default item (0) or the last selected item.
+        selectItem(mCurrentSelectedPosition);
+
         final SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        botIPField.setText(sp.getString(PREF_BOT_IP, null));
-        botIPField.addTextChangedListener(new TextWatcher() {
+        mViewHolder.botAddress.setText(sp.getString(PREF_BOT_IP, null));
+        mViewHolder.botAddress.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 mBotAddress = s.toString();
                 sp.edit().putString(PREF_BOT_IP, mBotAddress).apply();
@@ -128,24 +142,24 @@ public class NavigationDrawerFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        mDrawerListView = (ListView)view.findViewById(R.id.drawer_list);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        mViewHolder.drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
+        mViewHolder.drawerListView.setAdapter(new ArrayAdapter<String>(
+                getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 getSections(getResources())));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        mViewHolder.drawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return view;
     }
 
     public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+        return mViewHolder.drawerLayout != null && mViewHolder.drawerLayout.isDrawerOpen(mViewHolder.container);
     }
 
     /**
@@ -155,23 +169,26 @@ public class NavigationDrawerFragment extends Fragment {
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
-        mFragmentContainerView = getActivity().findViewById(fragmentId);
-        mDrawerLayout = drawerLayout;
+        mViewHolder.container = getActivity().findViewById(fragmentId);
+        mViewHolder.drawerLayout = drawerLayout;
 
         // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mViewHolder.drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        /*
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+         */
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_menu_white_24dp,    /* nav drawer image to replace 'Up' caret */
+                mViewHolder.drawerLayout,         /* DrawerLayout object */
+                mViewHolder.windowToolbar,
+                //R.drawable.ic_menu_white_24dp,    /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -212,27 +229,27 @@ public class NavigationDrawerFragment extends Fragment {
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
         if ((!mUserLearnedDrawer && !mFromSavedInstanceState) || mBotAddress == null) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
+            mViewHolder.drawerLayout.openDrawer(mViewHolder.container);
         }
 
         // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post(new Runnable() {
+        mViewHolder.drawerLayout.post(new Runnable() {
             @Override
             public void run() {
                 mDrawerToggle.syncState();
             }
         });
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mViewHolder.drawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
+        if (mViewHolder.drawerListView != null) {
+            mViewHolder.drawerListView.setItemChecked(position, true);
         }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        if (mViewHolder.drawerLayout != null) {
+            mViewHolder.drawerLayout.closeDrawer(mViewHolder.container);
         }
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
@@ -276,7 +293,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
+        if (mViewHolder.drawerLayout != null && isDrawerOpen()) {
             inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
         }
@@ -286,11 +303,6 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -328,7 +340,7 @@ public class NavigationDrawerFragment extends Fragment {
         return new String[]{
             res.getString(R.string.section_status),
             res.getString(R.string.section_joy),
-            res.getString(R.string.section_schedule),
+            //res.getString(R.string.section_schedule)
         };
     }
 

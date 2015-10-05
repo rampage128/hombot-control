@@ -1,12 +1,10 @@
 <resources>
 
-    <color name="bgcolor">#444444</color>
-    <color name="primary">#c40452</color>
-    <color name="primary_dark">#99033f</color>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:windowBackground">@color/bgcolor</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/ColorBg</item>
+        <item name="colorPrimary">@color/ColorPrimary</item>
+        <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
 
         <item name="android:actionBarStyle">@style/homactionbar</item>
 
@@ -18,24 +16,24 @@
     <!-- ActionBar styles -->
     <style name="homactionbar"
         parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@color/ColorPrimary</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:logo">@android:color/transparent</item>
     </style>
 
     <style name="status_label">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/ColorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">48sp</item>
     </style>
 
     <style name="battery_label">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/ColorPrimary</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="header_label">
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/ColorPrimary</item>
     </style>
 
     <style name="header_label_contrast" parent="@style/header_label">
@@ -45,10 +43,13 @@
     <style name="control_button" parent="@android:style/Widget.Holo.Light.Button">
         <item name="android:background">@drawable/command_button</item>
         <item name="android:textColor">#ffffff</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+<!--
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
         <item name="android:paddingTop">32dp</item>
         <item name="android:paddingBottom">32dp</item>
+-->
         <item name="android:textAppearance">?android:attr/textAppearanceSmallInverse</item>
     </style>
 
@@ -57,6 +58,13 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
         <item name="android:lineSpacingExtra">8dp</item>
+    </style>
+
+    <style name="bot_text">
+        <item name="android:colorControlNormal">#ffffff</item>
+        <item name="android:colorControlActivated">#ffffff</item>
+        <item name="android:colorControlHighlight">#ffffff</item>
+        <item name="android:textColor">#ffffff</item>
     </style>
 
 </resources>

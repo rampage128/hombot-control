@@ -45,6 +45,7 @@ public class StatusSection extends SectionFragment {
         Button commandHome;
         Button commandRepeat;
     }
+
     private ViewHolder mViewHolder;
 
     private boolean isWorking = false;
@@ -66,24 +67,24 @@ public class StatusSection extends SectionFragment {
 
         mViewHolder = new ViewHolder();
 
-        mViewHolder.display                 = view.findViewById(R.id.ct_status);
-        mViewHolder.displayStatusText       = (TextView)view.findViewById(R.id.lb_status);
-        mViewHolder.displayBatteryProgress  = (ProgressBar) view.findViewById(R.id.battery_progress);
-        mViewHolder.displayBatteryText      = (TextView)view.findViewById(R.id.battery_text);
-        mViewHolder.displayModeHome         = (ImageView)view.findViewById(R.id.ic_mode_home);
-        mViewHolder.displayModeZigZag       = (ImageView)view.findViewById(R.id.ic_mode_zigzag);
-        mViewHolder.displayModeCellByCell   = (ImageView)view.findViewById(R.id.ic_mode_cell);
-        mViewHolder.displayModeSpiral       = (ImageView)view.findViewById(R.id.ic_mode_spiral);
-        mViewHolder.displayModeMySpace      = (ImageView)view.findViewById(R.id.ic_mode_myspace);
-        mViewHolder.displayModeRepeat       = (ImageView)view.findViewById(R.id.ic_mode_repeat);
-        mViewHolder.displayTurboLeft        = (ImageView)view.findViewById(R.id.ic_turbo_left);
-        mViewHolder.displayTurboRight       = (ImageView)view.findViewById(R.id.ic_turbo_right);
+        mViewHolder.display = view.findViewById(R.id.ct_status);
+        mViewHolder.displayStatusText = (TextView) view.findViewById(R.id.lb_status);
+        mViewHolder.displayBatteryProgress = (ProgressBar) view.findViewById(R.id.battery_progress);
+        mViewHolder.displayBatteryText = (TextView) view.findViewById(R.id.battery_text);
+        mViewHolder.displayModeHome = (ImageView) view.findViewById(R.id.ic_mode_home);
+        mViewHolder.displayModeZigZag = (ImageView) view.findViewById(R.id.ic_mode_zigzag);
+        mViewHolder.displayModeCellByCell = (ImageView) view.findViewById(R.id.ic_mode_cell);
+        mViewHolder.displayModeSpiral = (ImageView) view.findViewById(R.id.ic_mode_spiral);
+        mViewHolder.displayModeMySpace = (ImageView) view.findViewById(R.id.ic_mode_myspace);
+        mViewHolder.displayModeRepeat = (ImageView) view.findViewById(R.id.ic_mode_repeat);
+        mViewHolder.displayTurboLeft = (ImageView) view.findViewById(R.id.ic_turbo_left);
+        mViewHolder.displayTurboRight = (ImageView) view.findViewById(R.id.ic_turbo_right);
 
-        mViewHolder.commandStartStop    = (Button)view.findViewById(R.id.cm_startstop);
-        mViewHolder.commandTurbo        = (Button)view.findViewById(R.id.cm_turbo);
-        mViewHolder.commandMode         = (Button)view.findViewById(R.id.cm_mode);
-        mViewHolder.commandHome         = (Button)view.findViewById(R.id.cm_home);
-        mViewHolder.commandRepeat       = (Button)view.findViewById(R.id.cm_repeat);
+        mViewHolder.commandStartStop = (Button) view.findViewById(R.id.cm_startstop);
+        mViewHolder.commandTurbo = (Button) view.findViewById(R.id.cm_turbo);
+        mViewHolder.commandMode = (Button) view.findViewById(R.id.cm_mode);
+        mViewHolder.commandHome = (Button) view.findViewById(R.id.cm_home);
+        mViewHolder.commandRepeat = (Button) view.findViewById(R.id.cm_repeat);
 
         mViewHolder.commandTurbo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -133,13 +134,12 @@ public class StatusSection extends SectionFragment {
     }
 
 
-
     @Override
     public void statusUpdate(HombotStatus status) {
 
-        this.isDocked   = HombotStatus.Status.CHARGING.equals(status.getStatus());
-        this.isWorking  = HombotStatus.Status.WORKING.equals(status.getStatus()) || HombotStatus.Status.HOMING.equals(status.getStatus());
-        this.mode       = status.getMode();
+        this.isDocked = HombotStatus.Status.CHARGING.equals(status.getStatus());
+        this.isWorking = HombotStatus.Status.WORKING.equals(status.getStatus()) || HombotStatus.Status.HOMING.equals(status.getStatus());
+        this.mode = status.getMode();
 
         if (!this.isAdded()) {
             return;

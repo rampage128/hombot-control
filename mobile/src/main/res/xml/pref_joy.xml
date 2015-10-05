@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:key="joy_driveinterval"
+        android:title="@string/pref_title_joy_driveinterval"
+        android:entries="@array/pref_joy_interval_titles"
+        android:entryValues="@array/pref_joy_interval_values"
+        android:defaultValue="800"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+    <ListPreference
+        android:key="joy_turninterval"
+        android:title="@string/pref_title_joy_turninterval"
+        android:entries="@array/pref_joy_interval_titles"
+        android:entryValues="@array/pref_joy_interval_values"
+        android:defaultValue="800"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+</PreferenceScreen>

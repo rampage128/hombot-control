@@ -9,7 +9,7 @@
 -->
     <item android:state_activated="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/primary"/>
+            <solid android:color="@color/ColorPrimary"/>
         </shape>
     </item>
     <item android:drawable="@android:color/transparent" />

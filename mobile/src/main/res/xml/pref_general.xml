@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="pref_category_colors"
+        android:title="@string/pref_category_colors">
+        <de.jlab.android.hombot.utils.ColorPreference
+            android:defaultValue="#444444"
+            android:key="color_bg"
+            android:title="@string/pref_title_general_bgcolor" />
+
+        <de.jlab.android.hombot.utils.ColorPreference
+            android:defaultValue="#ffffff"
+            android:key="color_fg"
+            android:title="@string/pref_title_general_foregroundcolor" />
+
+        <de.jlab.android.hombot.utils.ColorPreference
+            android:defaultValue="#ff0000"
+            android:key="color_accent"
+            android:title="@string/pref_title_general_accentcolor" />
+    </PreferenceCategory>
+</PreferenceScreen>

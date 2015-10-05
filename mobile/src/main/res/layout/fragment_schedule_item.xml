@@ -4,8 +4,6 @@
     tools:context="de.jlab.android.hombot.sections.schedule.ScheduleItem"
     android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <TextView
         style="@style/header_label"
         android:layout_width="wrap_content"

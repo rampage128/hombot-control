@@ -49,5 +49,45 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_category_colors">Colors</string>
+
+    <string name="pref_title_general_bgcolor">Background color</string>
+    <string name="pref_desc_general_bgcolor">Color for background</string>
+    <string name="pref_default_general_bgcolor">#444444</string>
+    <string name="pref_title_general_foregroundcolor">Foreground color</string>
+    <string name="pref_desc_general_foregroundcolor">Color for text and button outlines</string>
+    <string name="pref_default_general_foregroundcolor">#ffffff</string>
+    <string name="pref_title_general_accentcolor">Accent color</string>
+    <string name="pref_desc_general_accentcolor">Color for accented elements</string>
+    <string name="pref_default_general_accentcolor">#ff0000</string>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_joy">Remote Control</string>
+
+    <string name="pref_title_joy_driveinterval">Drive command interval</string>
+    <string name="pref_title_joy_turninterval">Turn command interval</string>
+    <string-array name="pref_joy_interval_titles">
+        <item>300 ms</item>
+        <item>400 ms</item>
+        <item>500 ms</item>
+        <item>600 ms</item>
+        <item>700 ms</item>
+        <item>800 ms</item>
+    </string-array>
+    <string-array name="pref_joy_interval_values">
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>600</item>
+        <item>700</item>
+        <item>800</item>
+    </string-array>
 
 </resources>

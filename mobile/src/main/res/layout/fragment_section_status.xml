@@ -194,7 +194,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/command_start"
                 android:id="@+id/cm_startstop"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:minWidth="88dp" />
 
         </LinearLayout>
     </FrameLayout>

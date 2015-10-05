@@ -160,13 +160,15 @@ public class RequestEngine {
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
                         final HombotStatus status = requestStatus();
-                        mListener.runOnUiThread(new Runnable() {
-                            public void run() {
-                                if (mListener != null) {
-                                    mListener.statusUpdate(status);
+                        if (mListener != null) {
+                            mListener.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    if (mListener != null) {
+                                        mListener.statusUpdate(status);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();

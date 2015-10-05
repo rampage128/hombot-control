@@ -30,142 +30,147 @@ import de.jlab.android.hombot.utils.RepeatListener;
  */
 public class JoySection extends SectionFragment {
 
+    private static class ViewHolder {
+        Button commandMySpace;
+        Button commandSpiral;
+        Button commandTurbo;
+        Button commandHome;
+        View joy;
+    }
+
+    private ViewHolder mViewHolder;
+
     public static JoySection newInstance(int sectionNumber) {
         JoySection fragment = new JoySection();
         fragment.register(sectionNumber);
         return fragment;
     }
 
-      @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_section_joy, container, false);
+        final View view = inflater.inflate(R.layout.fragment_section_joy, container, false);
 
-        ((Button)view.findViewById(R.id.cm_mode_myspace)).setOnClickListener(new View.OnClickListener() {
-          public void onClick(View v) {
-              sendCommand(RequestEngine.Command.MODE_MYSPACE);
-          }
+        mViewHolder = new ViewHolder();
+        mViewHolder.commandMySpace = (Button) view.findViewById(R.id.cm_mode_myspace);
+        mViewHolder.commandSpiral = (Button) view.findViewById(R.id.cm_mode_spiral);
+        mViewHolder.commandTurbo = (Button) view.findViewById(R.id.cm_turbo);
+        mViewHolder.commandHome = (Button) view.findViewById(R.id.cm_home);
+        mViewHolder.joy = view.findViewById(R.id.ct_joy);
+
+
+        mViewHolder.commandMySpace.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendCommand(RequestEngine.Command.MODE_MYSPACE);
+            }
         });
 
-        ((Button)view.findViewById(R.id.cm_mode_spiral)).setOnClickListener(new View.OnClickListener() {
-          public void onClick(View v) {
-              sendCommand(RequestEngine.Command.MODE_SPIRAL);
-              sendCommand(RequestEngine.Command.START);
-          }
+        mViewHolder.commandSpiral.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendCommand(RequestEngine.Command.MODE_SPIRAL);
+                sendCommand(RequestEngine.Command.START);
+            }
         });
 
-        ((Button)view.findViewById(R.id.cm_turbo)).setOnClickListener(new View.OnClickListener() {
-          public void onClick(View v) {
-              sendCommand(RequestEngine.Command.TURBO);
-          }
+        mViewHolder.commandTurbo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendCommand(RequestEngine.Command.TURBO);
+            }
         });
 
-        ((Button)view.findViewById(R.id.cm_home)).setOnClickListener(new View.OnClickListener() {
-          public void onClick(View v) {
-              sendCommand(RequestEngine.Command.HOME);
-          }
+        mViewHolder.commandHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendCommand(RequestEngine.Command.HOME);
+            }
         });
 
-/*
-        view.findViewById(R.id.cm_joy_forward).setOnTouchListener(new RepeatListener(800, 800, new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              sendCommand(RequestEngine.Command.JOY_FORWARD);
-          }
-        }, new RepeatListener.ReleaseListener() {
-          public void onRelease() {
-              sendCommand(RequestEngine.Command.JOY_RELEASE);
-          }
-        }));
 
-        view.findViewById(R.id.cm_joy_left).setOnTouchListener(new RepeatListener(800, 800, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendCommand(RequestEngine.Command.JOY_LEFT);
-            }
-        }, new RepeatListener.ReleaseListener() {
-            public void onRelease() {
-                sendCommand(RequestEngine.Command.JOY_RELEASE);
-            }
-        }));
+        // TODO FOR TESTING!
+        mViewHolder.joy.getBackground().setColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY);
 
-        view.findViewById(R.id.cm_joy_right).setOnTouchListener(new RepeatListener(800, 800, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendCommand(RequestEngine.Command.JOY_RIGHT);
-            }
-        }, new RepeatListener.ReleaseListener() {
-            public void onRelease() {
-                sendCommand(RequestEngine.Command.JOY_RELEASE);
-            }
-        }));
-
-        view.findViewById(R.id.cm_joy_back).setOnTouchListener(new RepeatListener(800, 800, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendCommand(RequestEngine.Command.JOY_BACK);
-            }
-        }, new RepeatListener.ReleaseListener() {
-            public void onRelease() {
-                sendCommand(RequestEngine.Command.JOY_RELEASE);
-            }
-        }));
-*/
-        final View joy = view.findViewById(R.id.ct_joy);
-
-        joy.getBackground().setColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY);
-
-        joy.setOnTouchListener(new JoyTouchListener(800, 800, new JoyTouchListener.PushListener[] {
+        mViewHolder.joy.setOnTouchListener(new JoyTouchListener(800, 800, new JoyTouchListener.PushListener[]{
                 new JoyTouchListener.PushListener() {
                     @Override
-                    public void onPush() { sendCommand(RequestEngine.Command.JOY_FORWARD); Log.d("MOT", "F"); }
+                    public void onPush() {
+                        sendCommand(RequestEngine.Command.JOY_FORWARD);
+                        Log.d("MOT", "F");
+                    }
+
                     @Override
-                    public void onRelease() { sendCommand(RequestEngine.Command.JOY_RELEASE); Log.d("MOT", "-"); }
+                    public void onRelease() {
+                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        Log.d("MOT", "-");
+                    }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
-                    public void onPush() { sendCommand(RequestEngine.Command.JOY_RIGHT); Log.d("MOT", "R"); }
+                    public void onPush() {
+                        sendCommand(RequestEngine.Command.JOY_RIGHT);
+                        Log.d("MOT", "R");
+                    }
+
                     @Override
-                    public void onRelease() { sendCommand(RequestEngine.Command.JOY_RELEASE); Log.d("MOT", "-"); }
+                    public void onRelease() {
+                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        Log.d("MOT", "-");
+                    }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
-                    public void onPush() { sendCommand(RequestEngine.Command.JOY_BACK); Log.d("MOT", "B"); }
+                    public void onPush() {
+                        sendCommand(RequestEngine.Command.JOY_BACK);
+                        Log.d("MOT", "B");
+                    }
+
                     @Override
-                    public void onRelease() { sendCommand(RequestEngine.Command.JOY_RELEASE); Log.d("MOT", "-"); }
+                    public void onRelease() {
+                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        Log.d("MOT", "-");
+                    }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
-                    public void onPush() { sendCommand(RequestEngine.Command.JOY_LEFT); Log.d("MOT", "L"); }
+                    public void onPush() {
+                        sendCommand(RequestEngine.Command.JOY_LEFT);
+                        Log.d("MOT", "L");
+                    }
+
                     @Override
-                    public void onRelease() { sendCommand(RequestEngine.Command.JOY_RELEASE); Log.d("MOT", "-"); }
+                    public void onRelease() {
+                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        Log.d("MOT", "-");
+                    }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
-                    public void onPush() { sendCommand(RequestEngine.Command.PAUSE); Log.d("MOT", "P"); }
+                    public void onPush() {
+                        sendCommand(RequestEngine.Command.PAUSE);
+                        Log.d("MOT", "P");
+                    }
+
                     @Override
                     public void onRelease() { /* NO RELEASE FOR CENTER COMMAND */ }
                 }
         }));
 
-        if(joy.getViewTreeObserver().isAlive()){
-            joy.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        // MAKE JOYPAD "SQUARE" ACCORDING TO THE SMALLER AVAILABLE DIMENSION FIXME BUGGY ON ORIENTATION CHANGE
+        if (mViewHolder.joy.getViewTreeObserver().isAlive()) {
+            mViewHolder.joy.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
-                public void onGlobalLayout(){
-                    int finalSize = Math.min(joy.getMeasuredWidth(), joy.getMeasuredHeight());
-                    ((LinearLayout)joy).setLayoutParams(new FrameLayout.LayoutParams(finalSize, finalSize));
+                public void onGlobalLayout() {
+                    int finalSize = Math.min(mViewHolder.joy.getMeasuredWidth(), mViewHolder.joy.getMeasuredHeight());
+                    ((LinearLayout) mViewHolder.joy).setLayoutParams(new FrameLayout.LayoutParams(finalSize, finalSize));
+                    view.invalidate();
                 }
             });
         }
-
-        view.invalidate();
 
         return view;
     }
 
     private void handleAction(Runnable runner, MotionEvent event, Handler repeatedHandler) {
-        switch(event.getAction()) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 repeatedHandler.removeCallbacks(runner);
                 repeatedHandler.postDelayed(runner, 0);

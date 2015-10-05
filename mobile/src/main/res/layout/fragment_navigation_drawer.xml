@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_dark"
+        android:background="@color/ColorPrimaryDark"
         android:padding="16dp">
 
         <LinearLayout
@@ -25,7 +25,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/bot_address" />
+                android:id="@+id/bot_address"
+                style="@style/bot_text" />
 
             <LinearLayout
                 android:orientation="horizontal"

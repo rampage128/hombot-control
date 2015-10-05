@@ -3,10 +3,14 @@ package de.jlab.android.hombot;
 import android.app.Activity;
 
 import android.app.ActionBar;
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +22,7 @@ import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.sections.schedule.ScheduleItem;
 
 
-public class MainActivity extends Activity
+public class MainActivity extends AppCompatActivity
 implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.SectionInteractionListener, RequestEngine.RequestListener, ScheduleItem.DayChangedListener {
 
     /**
@@ -37,9 +41,14 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mRequestEngine = new RequestEngine();
         setContentView(R.layout.activity_main);
+
+        // Set up Toolbar
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -53,7 +62,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
+        window.setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
     }
 
     @Override
@@ -61,7 +70,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
         // update the main content by replacing fragments
         mSectionFragment = NavigationDrawerFragment.getSectionFragment(position);
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, mSectionFragment)
                 .commit();
@@ -73,7 +82,8 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
     }
 
     public void onSectionAttached(int number) {
-        getActionBar().setTitle(NavigationDrawerFragment.getSections(getResources())[number]);
+        setTitle(NavigationDrawerFragment.getSections(getResources())[number]);
+        // getSupportActionBar().setTitle(NavigationDrawerFragment.getSections(getResources())[number]);
     }
 
     @Override
@@ -82,18 +92,15 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        //Toolbar toolbar = getSupportActionBar();
+        //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //toolbar.setDisplayShowTitleEnabled(true);
+        //getSupportActionBar().setTitle(mTitle);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (true)
-            return super.onCreateOptionsMenu(menu);
-
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
@@ -114,6 +121,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

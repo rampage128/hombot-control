@@ -1,8 +1,9 @@
 package de.jlab.android.hombot;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import de.jlab.android.hombot.sections.StatusSection;
  * {@link StatusSection.SectionInteractionListener} interface
  * to handle interaction events.
  */
-public class SectionFragment extends Fragment {
+public abstract class SectionFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -41,19 +42,37 @@ public class SectionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_placeholder, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    public abstract View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                   Bundle savedInstanceState);
+
+/*
+    @Override
+    public final View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                   Bundle savedInstanceState) {
+
+        View rootView = onCreateSectionView(inflater, container, savedInstanceState);
+
+        //getActivity().setTitle(NavigationDrawerFragment.getSections(getResources())[getArguments().getInt(ARG_SECTION_NUMBER)]);
+
         return rootView;
     }
 
+    protected abstract View onCreateSectionView(LayoutInflater inflater, ViewGroup container,
+                                                Bundle savedInstanceState);
+*/
+
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (SectionInteractionListener) activity;
+            mListener = (SectionInteractionListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
         mListener.onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));

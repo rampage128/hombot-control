@@ -73,11 +73,17 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginLeft="32dp">
+        android:layout_marginLeft="32dp"
+        android:gravity="center_vertical|center_horizontal">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/joy_bg"
+            android:id="@+id/ct_joy"
+            android:focusableInTouchMode="false"
+            android:layout_gravity="center"
             android:layout_centerInParent="true">
 
             <TextView
@@ -88,110 +94,6 @@
                 android:layout_gravity="center"
                 style="@style/joy_button"
                 android:gravity="center" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/joy_bg"
-                android:id="@+id/ct_joy"
-                android:focusableInTouchMode="false"
-                android:layout_gravity="center"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentStart="false"
-                android:layout_centerHorizontal="true">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="gone">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"></FrameLayout>
-
-                    <ImageButton
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:text="New Button"
-                        android:id="@+id/cm_joy_forward"
-                        android:layout_row="0"
-                        android:layout_column="1"
-                        style="@style/joy_button"
-                        android:layout_rowWeight="1"
-                        android:src="@drawable/ic_keyboard_arrow_up_white_48dp"
-                        android:layout_weight="1" />
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"></FrameLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="gone">
-
-                    <ImageButton
-                        style="@style/joy_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/cm_joy_left"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_keyboard_arrow_left_white_48dp" />
-
-                    <Button
-                        style="@style/control_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:text="New Button"
-                        android:id="@+id/cm_stopok"
-                        android:layout_weight="1"
-                        android:visibility="invisible" />
-
-                    <ImageButton
-                        style="@style/joy_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/cm_joy_right"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_keyboard_arrow_right_white_48dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="gone">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1" />
-
-                    <ImageButton
-                        style="@style/joy_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:id="@+id/cm_joy_back"
-                        android:layout_columnSpan="2"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_keyboard_arrow_down_white_48dp" />
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1" />
-                </LinearLayout>
-
-            </LinearLayout>
         </FrameLayout>
 
     </RelativeLayout>

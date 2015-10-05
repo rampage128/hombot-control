@@ -160,7 +160,7 @@ public class JoySection extends SectionFragment {
                 @Override
                 public void onGlobalLayout() {
                     int finalSize = Math.min(mViewHolder.joy.getMeasuredWidth(), mViewHolder.joy.getMeasuredHeight());
-                    ((LinearLayout) mViewHolder.joy).setLayoutParams(new FrameLayout.LayoutParams(finalSize, finalSize));
+                    mViewHolder.joy.setLayoutParams(new RelativeLayout.LayoutParams(finalSize, finalSize));
                     view.invalidate();
                 }
             });

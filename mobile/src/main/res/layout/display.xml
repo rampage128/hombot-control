@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:id="@+id/ct_status">
+
+    <ImageView
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/ic_turbo_left"
+        android:src="@drawable/ic_display_turbo_left" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"></FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/battery_text"
+                android:layout_gravity="center_vertical"
+                style="@style/battery_label"
+                android:layout_marginRight="8dp" />
+
+            <ProgressBar
+                android:layout_width="72dp"
+                android:layout_height="fill_parent"
+                android:id="@+id/battery_progress"
+                android:progress="50"
+                android:indeterminate="false"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/battery_progress" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lb_status"
+                android:theme="@style/status_label"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:text="@string/status_offline" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ic_mode_repeat"
+                android:src="@drawable/ic_display_mode_repeat"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ic_mode_zigzag"
+                android:src="@drawable/ic_display_mode_zigzag"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ic_mode_cell"
+                android:src="@drawable/ic_display_mode_cell"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ic_mode_spiral"
+                android:src="@drawable/ic_display_mode_spiral"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ic_mode_myspace"
+                android:src="@drawable/ic_display_mode_myspace"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/ic_mode_home"
+                android:src="@drawable/ic_display_mode_home"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/ic_turbo_right"
+        android:src="@drawable/ic_display_turbo_right" />
+
+</LinearLayout>

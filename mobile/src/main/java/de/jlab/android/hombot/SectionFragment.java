@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.core.HombotStatus;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.core.RequestEngine;
+import de.jlab.android.hombot.core.RequestEngine.Command;
 import de.jlab.android.hombot.sections.StatusSection;
 
 /**
@@ -49,22 +51,10 @@ public abstract class SectionFragment extends Fragment {
 
     public abstract View onCreateView(LayoutInflater inflater, ViewGroup container,
                                    Bundle savedInstanceState);
+    public void statusUpdate(HombotStatus status) {}
+    public void clearScheduleDay(HombotSchedule.Weekday day) {}
+    public void setScheduleDay(HombotSchedule.Weekday day, String time, HombotSchedule.Mode mode) {}
 
-/*
-    @Override
-    public final View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                   Bundle savedInstanceState) {
-
-        View rootView = onCreateSectionView(inflater, container, savedInstanceState);
-
-        //getActivity().setTitle(NavigationDrawerFragment.getSections(getResources())[getArguments().getInt(ARG_SECTION_NUMBER)]);
-
-        return rootView;
-    }
-
-    protected abstract View onCreateSectionView(LayoutInflater inflater, ViewGroup container,
-                                                Bundle savedInstanceState);
-*/
 
     @Override
     public void onAttach(Context context) {
@@ -84,7 +74,7 @@ public abstract class SectionFragment extends Fragment {
         mListener = null;
     }
 
-    protected void sendCommand(RequestEngine.Command command) {
+    protected void sendCommand(Command command) {
         mListener.sendCommand(command);
     }
 
@@ -101,15 +91,11 @@ public abstract class SectionFragment extends Fragment {
     public interface SectionInteractionListener {
         public void onSectionAttached(int section);
 
-        public void sendCommand(RequestEngine.Command command);
-    }
+        public void sendCommand(Command command);
 
-    public void statusUpdate(HombotStatus status) {
+        public HombotSchedule requestSchedule();
 
-    }
-
-    public void scheduleChanged(int dayNum, String time, String mode) {
-
+        public void setSchedule(HombotSchedule schedule);
     }
 
 }

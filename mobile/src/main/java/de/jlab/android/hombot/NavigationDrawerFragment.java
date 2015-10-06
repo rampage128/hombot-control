@@ -340,7 +340,7 @@ public class NavigationDrawerFragment extends Fragment {
         return new String[]{
             res.getString(R.string.section_status),
             res.getString(R.string.section_joy),
-            //res.getString(R.string.section_schedule)
+            res.getString(R.string.section_schedule)
         };
     }
 

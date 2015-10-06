@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.core.HombotStatus;
 import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.sections.schedule.ScheduleItem;
@@ -91,6 +93,17 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
         mRequestEngine.sendCommand(command);
     }
 
+    @Override
+    public HombotSchedule requestSchedule() {
+        return mRequestEngine.requestSchedule();
+    }
+
+    @Override
+    public void setSchedule(HombotSchedule schedule) {
+        mRequestEngine.updateSchedule(schedule);
+        Toast.makeText(this, R.string.schedule_saved, Toast.LENGTH_LONG).show();
+    }
+
     public void restoreActionBar() {
         //Toolbar toolbar = getSupportActionBar();
         //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -150,7 +163,12 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
     }
 
     @Override
-    public void onDayChanged(int dayNum, String time, String mode) {
-        mSectionFragment.scheduleChanged(dayNum, time, mode);
+    public void clearScheduleDay(HombotSchedule.Weekday day) {
+        mSectionFragment.clearScheduleDay(day);
+    }
+
+    @Override
+    public void setScheduleDay(HombotSchedule.Weekday day, String time, HombotSchedule.Mode mode) {
+        mSectionFragment.setScheduleDay(day, time, mode);
     }
 }

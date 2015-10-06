@@ -5,12 +5,14 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import de.jlab.android.hombot.MainActivity;
 import de.jlab.android.hombot.NavigationDrawerFragment;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
+import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.sections.schedule.ScheduleItem;
 
 /**
@@ -23,7 +25,12 @@ import de.jlab.android.hombot.sections.schedule.ScheduleItem;
  */
 public class ScheduleSection extends SectionFragment {
 
-    private String[] days = new String[7];
+    private static class ViewHolder {
+        Button saveButton;
+    }
+    private ViewHolder mViewHolder;
+
+    private HombotSchedule mSchedule;
 
     public static ScheduleSection newInstance(int sectionNumber) {
         ScheduleSection fragment = new ScheduleSection();
@@ -37,21 +44,45 @@ public class ScheduleSection extends SectionFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_section_schedule, container, false);
 
-        LinearLayout schedule = (LinearLayout) view.findViewById(R.id.schedule);
+        readSchedule();
+        //LinearLayout schedule = (LinearLayout) view.findViewById(R.id.schedule);
 
-        for (int i = 0; i < 7; i++) {
-            ScheduleItem item = ScheduleItem.newInstance(i);
-            FragmentManager fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
-            fragmentManager.beginTransaction().add(R.id.schedule, item, null).commit();
-        }
+        mViewHolder = new ViewHolder();
+        mViewHolder.saveButton = (Button)view.findViewById(R.id.savebutton);
 
-        //schedule.requestLayout();
+        mViewHolder.saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeSchedule();
+            }
+        });
 
         return view;
     }
 
-    public void scheduleChanged(int dayNum, String time, String mode) {
-        days[dayNum] = time + "," + mode;
+    private void writeSchedule() {
+        ((SectionInteractionListener) getActivity()).setSchedule(mSchedule);
+    }
+
+    private void readSchedule() {
+        new Thread(new Runnable() {
+            public void run() {
+                mSchedule = ((SectionInteractionListener) getActivity()).requestSchedule();
+                for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
+                    ScheduleItem item = ScheduleItem.newInstance(day, mSchedule.getDayTime(day), mSchedule.getDayMode(day));
+                    FragmentManager fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
+                    fragmentManager.beginTransaction().add(R.id.schedule, item, null).commit();
+                }
+            }
+        }).start();
+    }
+
+    public void clearScheduleDay(HombotSchedule.Weekday day) {
+        mSchedule.clearDay(day);
+    }
+
+    public void setScheduleDay(HombotSchedule.Weekday day, String time, HombotSchedule.Mode mode) {
+        mSchedule.setDay(day, time, mode);
     }
 
 }

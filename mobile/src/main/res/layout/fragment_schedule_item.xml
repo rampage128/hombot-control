@@ -12,16 +12,24 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp">
 
-        <EditText
+        <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="time"
+            android:id="@+id/time_check" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="none"
             android:ems="10"
-            android:id="@+id/time_field" />
+            android:id="@+id/time_field"
+            android:editable="false"
+            android:focusable="false"
+            android:layout_weight="1" />
 
         <Spinner
             android:layout_width="wrap_content"

@@ -58,25 +58,30 @@ public class RequestEngine {
         }
     }
 
-    public void updateSchedule(String[] days) {
-        if (days.length != 7) {
-            return;
+    public HombotSchedule requestSchedule() {
+        try {
+            URL statusUrl = new URL("http://" + botAddress + "/timer.txt");
+            HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line).append("\n");
+            }
+            urlConnection.disconnect();
+            return HombotSchedule.getInstance(total.toString());
+        } catch (Exception e) {
+            return HombotSchedule.getInstance(null);
         }
+    }
 
-        final StringBuilder scheduleBuilder = new StringBuilder();
-        scheduleBuilder.append("MONDAY=").append(days[0]);
-        scheduleBuilder.append("&TUESDAY=").append(days[1]);
-        scheduleBuilder.append("&WEDNESDAY=").append(days[2]);
-        scheduleBuilder.append("&THURSDAY=").append(days[3]);
-        scheduleBuilder.append("&FRIDAY=").append(days[4]);
-        scheduleBuilder.append("&SATURDAY=").append(days[5]);
-        scheduleBuilder.append("&SUNDAY=").append(days[6]);
-
+    public void updateSchedule(final HombotSchedule schedule) {
         new Thread(new Runnable() {
 
             public void run() {
                 try {
-                    URL statusUrl = new URL("http://" + botAddress + "/sites/schedule.html?" + scheduleBuilder.toString() + "&SEND=Save");
+                    URL statusUrl = new URL("http://" + botAddress + "/sites/schedule.html?" + schedule.getCommandString());
                     HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                             /*

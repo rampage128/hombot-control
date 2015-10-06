@@ -30,9 +30,15 @@
     <string name="command_myspace">My Space</string>
     <string name="command_spiral">Spiral</string>
 
+    <string name="schedule_save">Save schedule</string>
+    <string name="schedule_saved">Schedule saved!</string>
+    <string-array name="schedule_mode_titles">
+        <item>Zigzag</item>
+        <item>Cell by Cell</item>
+    </string-array>
     <string-array name="schedule_modes">
-        <item>zigzag</item>
-        <item>cellbycell</item>
+        <item>ZZ</item>
+        <item>SB</item>
     </string-array>
     <string-array name="weekdays">
         <item>Monday</item>

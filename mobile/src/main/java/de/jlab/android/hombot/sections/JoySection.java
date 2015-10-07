@@ -1,8 +1,11 @@
 package de.jlab.android.hombot.sections;
 
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,8 +17,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import de.jlab.android.hombot.NavigationDrawerFragment;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
+import de.jlab.android.hombot.SettingsActivity;
 import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.sections.joy.JoyTouchListener;
 import de.jlab.android.hombot.utils.RepeatListener;
@@ -46,11 +51,40 @@ public class JoySection extends SectionFragment {
         return fragment;
     }
 
+    private class InstaCleanHandler extends Handler {
+
+        public static final int SPIRAL = 1;
+
+        private boolean mInsta;
+
+        public InstaCleanHandler(boolean insta) {
+            mInsta = insta;
+        }
+
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    sendCommand(RequestEngine.Command.MODE_SPIRAL);
+                    if (mInsta) {
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException expected) {}
+                        sendCommand(RequestEngine.Command.START);
+                    }
+            }
+        }
+    }
+    private InstaCleanHandler mInstaCleanHandler;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_section_joy, container, false);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        mInstaCleanHandler = new InstaCleanHandler(sp.getBoolean(SettingsActivity.PREF_JOY_INSTACLEAN, false));
 
         mViewHolder = new ViewHolder();
         mViewHolder.commandMySpace = (Button) view.findViewById(R.id.cm_mode_myspace);
@@ -68,8 +102,9 @@ public class JoySection extends SectionFragment {
 
         mViewHolder.commandSpiral.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.MODE_SPIRAL);
-                sendCommand(RequestEngine.Command.START);
+                if (!mInstaCleanHandler.hasMessages(mInstaCleanHandler.SPIRAL)) {
+                    mInstaCleanHandler.sendEmptyMessage(mInstaCleanHandler.SPIRAL);
+                }
             }
         });
 
@@ -85,11 +120,10 @@ public class JoySection extends SectionFragment {
             }
         });
 
+        int intervalDrive = Integer.parseInt(sp.getString(SettingsActivity.PREF_JOY_INTERVAL_DRIVE, "800"));
+        int intervalTurn = Integer.parseInt(sp.getString(SettingsActivity.PREF_JOY_INTERVAL_TURN, "800"));
 
-        // TODO FOR TESTING!
-        mViewHolder.joy.getBackground().setColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY);
-
-        mViewHolder.joy.setOnTouchListener(new JoyTouchListener(800, 800, new JoyTouchListener.PushListener[]{
+        mViewHolder.joy.setOnTouchListener(new JoyTouchListener(intervalDrive, intervalTurn, new JoyTouchListener.PushListener[]{
                 new JoyTouchListener.PushListener() {
                     @Override
                     public void onPush() {
@@ -167,6 +201,13 @@ public class JoySection extends SectionFragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getColorizer().tintBackground(mViewHolder.joy, getColorizer().getColorText());
     }
 
     private void handleAction(Runnable runner, MotionEvent event, Handler repeatedHandler) {

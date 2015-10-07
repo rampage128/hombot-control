@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import de.jlab.android.hombot.core.HombotMap;
 import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.core.HombotStatus;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.core.RequestEngine.Command;
 import de.jlab.android.hombot.sections.StatusSection;
+import de.jlab.android.hombot.utils.Colorizer;
 
 /**
  * An extensible {@link Fragment} subclass.
@@ -29,6 +31,7 @@ public abstract class SectionFragment extends Fragment {
     protected static final String ARG_SECTION_NUMBER = "section_number";
 
     private SectionInteractionListener mListener;
+    private Colorizer mColorizer;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -49,6 +52,13 @@ public abstract class SectionFragment extends Fragment {
 
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mColorizer = new Colorizer(getActivity());
+        mColorizer.colorize(this, false);
+    }
+
     public abstract View onCreateView(LayoutInflater inflater, ViewGroup container,
                                    Bundle savedInstanceState);
     public void statusUpdate(HombotStatus status) {}
@@ -66,6 +76,10 @@ public abstract class SectionFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
         mListener.onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+    }
+
+    protected Colorizer getColorizer() {
+        return mColorizer;
     }
 
     @Override
@@ -94,6 +108,8 @@ public abstract class SectionFragment extends Fragment {
         public void sendCommand(Command command);
 
         public HombotSchedule requestSchedule();
+
+        public HombotMap requestMap(String mapName);
 
         public void setSchedule(HombotSchedule schedule);
     }

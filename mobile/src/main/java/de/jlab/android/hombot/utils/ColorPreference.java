@@ -63,6 +63,7 @@ public class ColorPreference extends Preference {
         if (mViewHolder != null) {
             View colorPreview = mViewHolder.colorPreview;
             colorPreview.setBackgroundColor(Color.parseColor(mValue));
+            persistString(mValue);
         }
     }
 

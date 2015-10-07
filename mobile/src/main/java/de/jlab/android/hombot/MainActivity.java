@@ -18,10 +18,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import de.jlab.android.hombot.core.HombotMap;
 import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.core.HombotStatus;
 import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.sections.schedule.ScheduleItem;
+import de.jlab.android.hombot.utils.Colorizer;
 
 
 public class MainActivity extends AppCompatActivity
@@ -53,7 +55,7 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
         actionBar.setHomeButtonEnabled(true);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -61,10 +63,15 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        /*
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
+        */
+
+        Colorizer colorizer = new Colorizer(this);
+        colorizer.colorize(this);
     }
 
     @Override
@@ -96,6 +103,11 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
     @Override
     public HombotSchedule requestSchedule() {
         return mRequestEngine.requestSchedule();
+    }
+
+    @Override
+    public HombotMap requestMap(String mapName) {
+        return mRequestEngine.requestMap(mapName);
     }
 
     @Override
@@ -134,7 +146,6 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

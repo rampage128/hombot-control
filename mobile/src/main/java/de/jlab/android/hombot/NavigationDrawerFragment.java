@@ -3,8 +3,9 @@ package de.jlab.android.hombot;
 
 import android.app.Activity;
 import android.app.ActionBar;
-import android.app.Fragment;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,9 +31,11 @@ import android.widget.Toast;
 
 import de.jlab.android.hombot.core.HombotStatus;
 import de.jlab.android.hombot.sections.JoySection;
+import de.jlab.android.hombot.sections.MapSection;
 import de.jlab.android.hombot.sections.PlaceholderSection;
 import de.jlab.android.hombot.sections.ScheduleSection;
 import de.jlab.android.hombot.sections.StatusSection;
+import de.jlab.android.hombot.utils.Colorizer;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -55,6 +58,7 @@ public class NavigationDrawerFragment extends Fragment {
     public static final String PREF_BOT_IP = "bot_ip";
 
     private static class ViewHolder {
+        View botPanel;
         TextView botName;
         TextView botVersion;
         EditText botAddress;
@@ -115,21 +119,28 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.fragment_navigation_drawer, container, false);
 
         mViewHolder                 = new ViewHolder();
+        mViewHolder.botPanel        = view.findViewById(R.id.bot_panel);
         mViewHolder.botName         = (TextView) view.findViewById(R.id.bot_name);
         mViewHolder.botVersion      = (TextView) view.findViewById(R.id.bot_version);
         mViewHolder.botAddress      = (EditText) view.findViewById(R.id.bot_address);
-        mViewHolder.drawerListView = (ListView) view.findViewById(R.id.drawer_list);
+        mViewHolder.drawerListView  = (ListView) view.findViewById(R.id.drawer_list);
         mViewHolder.windowToolbar   = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        final SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
+        } else {
+            if (sp.getBoolean(SettingsActivity.PREF_REMEMBER_SECTION, false)) {
+                mCurrentSelectedPosition = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, 0);
+            }
         }
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
 
-        final SharedPreferences sp = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+
         mViewHolder.botAddress.setText(sp.getString(PREF_BOT_IP, null));
         mViewHolder.botAddress.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -138,23 +149,36 @@ public class NavigationDrawerFragment extends Fragment {
                 mCallbacks.onBotAddressChanged(mBotAddress);
             }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
         });
 
 
         mViewHolder.drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 selectItem(position);
             }
         });
+
+        // TODO CREATE CUSTOM ADAPTER TO ENHANCE MENU CONTROL! (ESPECIALLY TO REPLACE STATIC SETTINGS ITEM)
         mViewHolder.drawerListView.setAdapter(new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 getSections(getResources())));
         mViewHolder.drawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        Colorizer colorizer = new Colorizer(getActivity());
+        mViewHolder.botPanel.setBackgroundColor(colorizer.getColorPrimary());
+        mViewHolder.botAddress.setTextColor(colorizer.getColorPrimaryText());
+        mViewHolder.botVersion.setTextColor(colorizer.getColorPrimaryText());
+        mViewHolder.botAddress.setTextColor(colorizer.getColorPrimaryText());
+
         return view;
     }
 
@@ -244,6 +268,12 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void selectItem(int position) {
+        // FIXME HACKY AND NEEDS TO BE REMOVED WHEN CUSTOM ADAPTER FOR DRAWERLIST IS IMPLEMENTED
+        if (getResources().getString(R.string.settings).equalsIgnoreCase(getSections(getResources())[position])) {
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
+            return;
+        }
+
         mCurrentSelectedPosition = position;
         if (mViewHolder.drawerListView != null) {
             mViewHolder.drawerListView.setItemChecked(position, true);
@@ -251,8 +281,12 @@ public class NavigationDrawerFragment extends Fragment {
         if (mViewHolder.drawerLayout != null) {
             mViewHolder.drawerLayout.closeDrawer(mViewHolder.container);
         }
+
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
+            SharedPreferences sp = PreferenceManager
+                    .getDefaultSharedPreferences(getActivity());
+            sp.edit().putInt(SettingsActivity.PREF_RECENT_SECTION, position).commit();
         }
     }
 
@@ -340,7 +374,9 @@ public class NavigationDrawerFragment extends Fragment {
         return new String[]{
             res.getString(R.string.section_status),
             res.getString(R.string.section_joy),
-            res.getString(R.string.section_schedule)
+            res.getString(R.string.section_schedule),
+            res.getString(R.string.section_map),
+            res.getString(R.string.settings)
         };
     }
 
@@ -352,6 +388,8 @@ public class NavigationDrawerFragment extends Fragment {
                 return JoySection.newInstance(position);
             case 2:
                 return ScheduleSection.newInstance(position);
+            case 3:
+                return MapSection.newInstance(position);
         }
 
         return PlaceholderSection.newInstance(position);

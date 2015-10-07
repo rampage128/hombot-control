@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import android.widget.ListView;
 import java.util.List;
 
 import de.jlab.android.hombot.utils.ColorPreference;
+import de.jlab.android.hombot.utils.Colorizer;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -50,9 +52,17 @@ import de.jlab.android.hombot.utils.ColorPreference;
  */
 public class SettingsActivity extends PreferenceActivity {
 
+    public static final String PREF_REMEMBER_SECTION = "remember_section";
+    public static final String PREF_RECENT_SECTION = "recent_section";
+
+    public static final String PREF_COLOR_THEME = "color_theme";
+    public static final String PREF_COLOR_PRIMARY = "color_primary";
+
+    public static final String PREF_JOY_INSTACLEAN = "joy_instaclean";
+    public static final String PREF_JOY_INTERVAL_TURN = "joy_turninterval";
+    public static final String PREF_JOY_INTERVAL_DRIVE = "joy_driveinterval";
+
     private AppCompatDelegate mDelegate;
-
-
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -172,9 +182,10 @@ public class SettingsActivity extends PreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("color_bg"));
-            bindPreferenceSummaryToValue(findPreference("color_fg"));
-            bindPreferenceSummaryToValue(findPreference("color_accent"));
+            //bindPreferenceSummaryToValue(findPreference("color_bg"));
+            //bindPreferenceSummaryToValue(findPreference("color_fg"));
+            bindPreferenceSummaryToValue(findPreference(PREF_COLOR_THEME));
+            bindPreferenceSummaryToValue(findPreference(PREF_COLOR_PRIMARY));
         }
 
         @Override
@@ -325,6 +336,7 @@ public class SettingsActivity extends PreferenceActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
             bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
+            bar.setId(R.id.toolbar);
             root.addView(bar, 0); // insert at top
         } else {
             ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
@@ -333,7 +345,7 @@ public class SettingsActivity extends PreferenceActivity {
             root.removeAllViews();
 
             bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
-
+            bar.setId(R.id.toolbar);
 
             int height;
             TypedValue tv = new TypedValue();
@@ -361,6 +373,13 @@ public class SettingsActivity extends PreferenceActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+
+        // colorize stuff
+        Colorizer colorizer = new Colorizer(this);
+        colorizer.colorize(this);
+        colorizer.colorize(getListView(), true, false);
+        getListView().setBackgroundColor(Color.TRANSPARENT);
+        getListView().setCacheColorHint(Color.TRANSPARENT);
     }
 
 }

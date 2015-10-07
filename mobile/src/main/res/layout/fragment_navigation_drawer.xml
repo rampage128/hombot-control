@@ -2,13 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#ffffff">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/ColorPrimaryDark"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:id="@+id/bot_panel">
 
         <LinearLayout
             android:orientation="vertical"
@@ -60,7 +62,8 @@
     <ListView android:layout_width="match_parent"
     android:layout_height="0dp" android:choiceMode="singleChoice"
     android:divider="@android:color/transparent" android:dividerHeight="0dp"
-    android:background="#ffffff" tools:context=".NavigationDrawerFragment"
-    android:layout_weight="1"
-        android:id="@+id/drawer_list" />
+        tools:context=".NavigationDrawerFragment"
+        android:id="@+id/drawer_list"
+        android:layout_weight="1" />
+
 </LinearLayout>

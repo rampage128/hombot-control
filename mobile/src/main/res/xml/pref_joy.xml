@@ -1,5 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBoxPreference
+        android:key="joy_instaclean"
+        android:title="@string/pref_title_joy_instaclean"
+        android:summaryOff="@string/pref_desc_joy_instaclean_off"
+        android:summaryOn="@string/pref_desc_joy_instaclean_on"
+        />
+
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

@@ -3,9 +3,12 @@
 
     <string name="app_name">Hombot Control</string>
 
+    <string name="settings">Settings</string>
+
     <string name="section_status">Status</string>
     <string name="section_joy">Control</string>
     <string name="section_schedule">Schedule</string>
+    <string name="section_map">Map</string>
 
     <string name="bot_address">Bot IP-Address</string>
 
@@ -62,20 +65,33 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
+    <string name="pref_title_remembersection">Remember last screen</string>
+    <string name="pref_desc_remembersection_on">Reopen last screen on app start</string>
+    <string name="pref_desc_remembersection_off">Show status screen on app start</string>
+
     <string name="pref_category_colors">Colors</string>
 
-    <string name="pref_title_general_bgcolor">Background color</string>
-    <string name="pref_desc_general_bgcolor">Color for background</string>
-    <string name="pref_default_general_bgcolor">#444444</string>
-    <string name="pref_title_general_foregroundcolor">Foreground color</string>
-    <string name="pref_desc_general_foregroundcolor">Color for text and button outlines</string>
-    <string name="pref_default_general_foregroundcolor">#ffffff</string>
-    <string name="pref_title_general_accentcolor">Accent color</string>
-    <string name="pref_desc_general_accentcolor">Color for accented elements</string>
-    <string name="pref_default_general_accentcolor">#ff0000</string>
+    <string name="pref_title_color_theme">Theme</string>
+    <string-array name="pref_color_theme_titles">
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+    <string-array name="pref_color_theme_values">
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
+    <string name="pref_default_color_theme">dark</string>
+
+    <string name="pref_title_color_primary">Primary color</string>
+    <string name="pref_desc_color_primary">Primary color of the interface</string>
+    <string name="pref_default_color_primary">#c40452</string>
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_joy">Remote Control</string>
+
+    <string name="pref_title_joy_instaclean">Immediately start cleaning</string>
+    <string name="pref_desc_joy_instaclean_on">Cleaning starts automatically after mode selection</string>
+    <string name="pref_desc_joy_instaclean_off">Start cleaning manually after mode selection</string>
 
     <string name="pref_title_joy_driveinterval">Drive command interval</string>
     <string name="pref_title_joy_turninterval">Turn command interval</string>

@@ -133,6 +133,13 @@ public class StatusSection extends SectionFragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mViewHolder.displayStatusText.setTextColor(getColorizer().getColorPrimary());
+        mViewHolder.displayBatteryText.setTextColor(getColorizer().getColorPrimary());
+    }
 
     @Override
     public void statusUpdate(HombotStatus status) {

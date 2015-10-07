@@ -58,6 +58,32 @@ public class RequestEngine {
         }
     }
 
+    public HombotMap requestMap(String mapName) {
+        if (mapName == null) {
+            mapName = HombotMap.MAP_GLOBAL;
+        }
+        String mapLocation = ".../usr/data/blackbox/"+mapName;
+        if (HombotMap.MAP_GLOBAL.equalsIgnoreCase(mapName)) {
+            mapLocation = ".../usr/data/"+mapName;
+        }
+
+        try {
+            URL statusUrl = new URL("http://" + botAddress + "/" + mapLocation);
+            HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line).append("\n");
+            }
+            urlConnection.disconnect();
+            return HombotMap.getInstance(total.toString());
+        } catch (Exception e) {
+            return HombotMap.getInstance(null);
+        }
+    }
+
     public HombotSchedule requestSchedule() {
         try {
             URL statusUrl = new URL("http://" + botAddress + "/timer.txt");

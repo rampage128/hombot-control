@@ -1,29 +1,23 @@
 package de.jlab.android.hombot.sections;
 
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import de.jlab.android.hombot.NavigationDrawerFragment;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.SettingsActivity;
 import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.sections.joy.JoyTouchListener;
-import de.jlab.android.hombot.utils.RepeatListener;
 
 /**
  * A {@link SectionFragment} subclass.
@@ -68,7 +62,7 @@ public class JoySection extends SectionFragment {
                     if (mInsta) {
                         try {
                             Thread.sleep(1500);
-                        } catch (InterruptedException expected) {}
+                        } catch (InterruptedException ignored) {}
                         sendCommand(RequestEngine.Command.START);
                     }
             }
@@ -102,8 +96,8 @@ public class JoySection extends SectionFragment {
 
         mViewHolder.commandSpiral.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (!mInstaCleanHandler.hasMessages(mInstaCleanHandler.SPIRAL)) {
-                    mInstaCleanHandler.sendEmptyMessage(mInstaCleanHandler.SPIRAL);
+                if (!mInstaCleanHandler.hasMessages(InstaCleanHandler.SPIRAL)) {
+                    mInstaCleanHandler.sendEmptyMessage(InstaCleanHandler.SPIRAL);
                 }
             }
         });
@@ -212,19 +206,6 @@ public class JoySection extends SectionFragment {
         getColorizer().colorize(mViewHolder.commandSpiral, false, false);
         getColorizer().colorize(mViewHolder.commandMySpace, false, false);
         getColorizer().colorize(mViewHolder.commandTurbo, false, false);
-    }
-
-    private void handleAction(Runnable runner, MotionEvent event, Handler repeatedHandler) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                repeatedHandler.removeCallbacks(runner);
-                repeatedHandler.postDelayed(runner, 0);
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                repeatedHandler.removeCallbacks(runner);
-                break;
-        }
     }
 
 }

@@ -1,8 +1,5 @@
 package de.jlab.android.hombot.core;
 
-import android.content.Context;
-import android.text.format.DateFormat;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +26,7 @@ public class HombotSchedule {
         SB
     }
 
-    private EnumMap<Weekday, DayData> mScheduleMap = new EnumMap(Weekday.class);
+    private EnumMap<Weekday, DayData> mScheduleMap = new EnumMap<>(Weekday.class);
 
     private HombotSchedule() {}
     public static HombotSchedule getInstance(String response) {
@@ -93,7 +90,7 @@ public class HombotSchedule {
             // CONVERT 24 HOUR TO 12 HOUR!
             if (!time.matches(".*(AM|PM)")) {
                 try {
-                    final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
                     final Date dateObj = sdf.parse(time);
                     time = new SimpleDateFormat("hh:mmaa", Locale.US).format(dateObj);
                 } catch (final ParseException e) {
@@ -129,14 +126,8 @@ public class HombotSchedule {
             return mMode;
         }
 
-        private void format(String time, Context context) {
-
-        }
-
         @Override
         public String toString() {
-            String time = mTime;
-
             return mTime + "," + mMode;
         }
 

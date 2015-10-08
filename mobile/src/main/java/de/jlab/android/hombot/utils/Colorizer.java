@@ -52,10 +52,14 @@ public final class Colorizer {
 
     public void colorize(Activity activity) {
         Window window = activity.getWindow();
+
+/*
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(mColorPrimaryDark);
+*/
         window.getDecorView().setBackgroundColor(mBgColor);
+
 
         colorizeToolbar((Toolbar) activity.findViewById(R.id.toolbar));
     }
@@ -84,7 +88,7 @@ public final class Colorizer {
         if (view instanceof TextView) {
             ((TextView) view).setTextColor(textColor);
             if (view instanceof Button) {
-                tintBackground((Button)view, textColor);
+                tintBackground(view, textColor);
             }
         } else if (view instanceof ImageView) {
             ((ImageView) view).getDrawable().setColorFilter(mColorPrimary, PorterDuff.Mode.SRC_ATOP);
@@ -155,7 +159,7 @@ public final class Colorizer {
 
     /**
      * Primitive function to get a contrasting text-color for a given color
-     * @param color
+     * @param color Color to get contrasting color for
      * @return {@Link Color.White} if color is darker than 0.5 or {@Link Color.Black}
      */
     private int getContrastingTextColor(int color) {

@@ -7,9 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +27,6 @@ public class EditBotDialog extends DialogFragment implements TextView.OnEditorAc
         void onFinishEditDialog(String name, String address, long id);
     }
 
-    private long id;
     private EditText mNameEdit;
     private EditText mAddressEdit;
 
@@ -80,28 +77,6 @@ public class EditBotDialog extends DialogFragment implements TextView.OnEditorAc
                 }).create();
     }
 
-    /*
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_edit_bot, container);
-            mNameEdit = (EditText) view.findViewById(R.id.bot_name);
-            mAddressEdit = (EditText) view.findViewById(R.id.bot_address);
-
-            mNameEdit.setText(getArguments().getString(ARG_NAME));
-            mAddressEdit.setText(getArguments().getString(ARG_ADDRESS));
-
-
-            getDialog().setTitle("TEST");
-
-
-                mEditText.requestFocus();
-                getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                mEditText.setOnEditorActionListener(this);
-
-
-            return view;
-        }
-        */
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (EditorInfo.IME_ACTION_DONE == actionId) {

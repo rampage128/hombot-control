@@ -105,8 +105,8 @@ public class JoyTouchListener implements View.OnTouchListener {
     }
 
     public interface PushListener {
-        public void onPush();
-        public void onRelease();
+        void onPush();
+        void onRelease();
     }
 
 }

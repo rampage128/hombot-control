@@ -31,7 +31,7 @@ public class ScheduleSection extends SectionFragment implements ScheduleItem.Day
 
     private HombotSchedule mSchedule;
 
-    private EnumMap<HombotSchedule.Weekday, ScheduleItem> mScheduleItemMap = new EnumMap(HombotSchedule.Weekday.class);
+    private EnumMap<HombotSchedule.Weekday, ScheduleItem> mScheduleItemMap = new EnumMap<>(HombotSchedule.Weekday.class);
 
 
     public static ScheduleSection newInstance(int sectionNumber) {

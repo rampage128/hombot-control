@@ -1,37 +1,25 @@
 package de.jlab.android.hombot;
 
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -66,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     public void onWindowFocusChanged(boolean focused) {
         if (focused) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            String botAddress = sp.getString(NavigationDrawerFragment.PREF_BOT_IP, null);
+            String botAddress = sp.getString(PREF_BOT_IP, null);
             mRequestEngine.setBotAddress(botAddress);
             mRequestEngine.start(this);
         } else {
@@ -124,7 +112,6 @@ public class MainActivity extends AppCompatActivity
         HombotDataOpenHelper dataHelper = new HombotDataOpenHelper(this);
         final SQLiteDatabase db = dataHelper.getReadableDatabase();
         Cursor botCursor = db.query(HombotDataContract.BotEntry.TABLE_NAME, new String[]{HombotDataContract.BotEntry._ID, HombotDataContract.BotEntry.COLUMN_NAME_NAME, HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS}, null, new String[0], null, null, HombotDataContract.BotEntry.COLUMN_NAME_NAME);
-        String[] queryCols=new String[]{ HombotDataContract.BotEntry._ID, HombotDataContract.BotEntry.COLUMN_NAME_NAME };
         String[] adapterCols=new String[]{ HombotDataContract.BotEntry.COLUMN_NAME_NAME };
         int[] adapterRowViews=new int[]{ android.R.id.text1 };
         SimpleCursorAdapter sca = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, botCursor, adapterCols, adapterRowViews, 0);
@@ -153,43 +140,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             startActivity(new Intent(this, BotManagerActivity.class));
         }
-
-        /*
-        String botAddress = sp.getString(PREF_BOT_IP, null);
-        mViewHolder.botAddress.setText(botAddress);
-        mViewHolder.botAddress.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                String botAddress = s.toString();
-                sp.edit().putString(PREF_BOT_IP, botAddress).apply();
-                mRequestEngine.setBotAddress(botAddress);
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        mViewHolder.botAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE)
-                    mViewHolder.botAddress.clearFocus();
-                return false;
-            }
-        });
-
-        mViewHolder.botAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                }
-            }
-        });
-*/
-
 
     }
 
@@ -265,7 +215,7 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        sp.edit().putInt(SettingsActivity.PREF_RECENT_SECTION, section.getSectionId()).commit();
+        sp.edit().putInt(SettingsActivity.PREF_RECENT_SECTION, section.getSectionId()).apply();
     }
 
     private Fragment getCurrentSection() {

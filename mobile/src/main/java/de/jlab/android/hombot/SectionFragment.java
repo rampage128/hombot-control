@@ -1,6 +1,5 @@
 package de.jlab.android.hombot;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import de.jlab.android.hombot.core.HombotMap;
 import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.core.HombotStatus;
-import de.jlab.android.hombot.R;
-import de.jlab.android.hombot.core.RequestEngine;
 import de.jlab.android.hombot.core.RequestEngine.Command;
 import de.jlab.android.hombot.sections.StatusSection;
 import de.jlab.android.hombot.utils.Colorizer;
@@ -108,15 +105,15 @@ public abstract class SectionFragment extends Fragment {
      */
     public interface SectionInteractionListener {
         @Deprecated
-        public void onSectionAttached(int section);
+        void onSectionAttached(int section);
 
-        public void sendCommand(Command command);
+        void sendCommand(Command command);
 
-        public HombotSchedule requestSchedule();
+        HombotSchedule requestSchedule();
 
-        public HombotMap requestMap(String mapName);
+        HombotMap requestMap(String mapName);
 
-        public void setSchedule(HombotSchedule schedule);
+        void setSchedule(HombotSchedule schedule);
     }
 
 }

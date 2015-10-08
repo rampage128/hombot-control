@@ -75,7 +75,7 @@ public class RepeatListener implements OnTouchListener {
     }
 
     public interface ReleaseListener {
-        public void onRelease();
+        void onRelease();
     }
 
 }

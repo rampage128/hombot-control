@@ -25,9 +25,9 @@ public class RequestEngine {
     }
 
     public interface RequestListener {
-        public void statusUpdate(HombotStatus status);
+        void statusUpdate(HombotStatus status);
 
-        public void runOnUiThread(Runnable runnable);
+        void runOnUiThread(Runnable runnable);
     }
 
     private String botAddress = null;
@@ -56,7 +56,7 @@ public class RequestEngine {
             }
             urlConnection.disconnect();
             statusString = total.toString();
-        } catch (Exception expected) {}
+        } catch (Exception ignored) {}
 
         return HombotStatus.getInstance(statusString, mStatus);
     }
@@ -122,7 +122,7 @@ public class RequestEngine {
                             }
                             */
                     urlConnection.disconnect();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
 
             }
@@ -182,7 +182,7 @@ public class RequestEngine {
                     }
                     */
                     urlConnection.disconnect();
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
             }
         }).start();
     }

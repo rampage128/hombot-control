@@ -1,14 +1,12 @@
 package de.jlab.android.hombot.sections.schedule;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import de.jlab.android.hombot.MainActivity;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.core.HombotSchedule;
 
@@ -44,8 +41,6 @@ public class ScheduleItem extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "day";
-    private static final String ARG_PARAM2 = "time";
-    private static final String ARG_PARAM3 = "mode";
 
     private HombotSchedule.Weekday mDay;
     private String mTime;
@@ -172,7 +167,7 @@ public class ScheduleItem extends Fragment {
                 TimePickerFragment newFragment = new TimePickerFragment();
                 newFragment.setEditText(mViewHolder.timeEdit);
                 newFragment.setScheduleItem(ScheduleItem.this);
-                newFragment.show(((MainActivity) getActivity()).getSupportFragmentManager(), "timePicker");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
 
             }
         });
@@ -235,7 +230,7 @@ public class ScheduleItem extends Fragment {
             try {
                 final SimpleDateFormat sdf = new SimpleDateFormat("hh:mmaa", Locale.US);
                 final Date dateObj = sdf.parse(mTime);
-                mTime = new SimpleDateFormat("HH:mm").format(dateObj);
+                mTime = new SimpleDateFormat("HH:mm", Locale.US).format(dateObj);
             } catch (final ParseException e) {
                 throw new IllegalArgumentException("Wrong time format given for DayData: " + mTime);
             }
@@ -297,6 +292,7 @@ public class ScheduleItem extends Fragment {
             mScheduleItem = scheduleItem;
         }
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -312,7 +308,7 @@ public class ScheduleItem extends Fragment {
                     try {
                         final SimpleDateFormat sdf = new SimpleDateFormat("hh:mmaa", Locale.US);
                         final Date dateObj = sdf.parse(timeString);
-                        timeString = new SimpleDateFormat("HH:mm").format(dateObj);
+                        timeString = new SimpleDateFormat("HH:mm", Locale.US).format(dateObj);
                     } catch (final ParseException e) {
                         throw new IllegalArgumentException("Wrong time format given for DayData: " + timeString);
                     }
@@ -350,7 +346,7 @@ public class ScheduleItem extends Fragment {
             // CONVERT 24 HOUR TO 12 HOUR IF USER USES 12 HOUR FORMAT! TIMEPICKER ALWAYS RETURNS 24 HOUR FORMAT HERE!
             if (!DateFormat.is24HourFormat(getActivity()) && !time.matches(".*(AM|PM)")) {
                 try {
-                    final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
                     final Date dateObj = sdf.parse(time);
                     time = new SimpleDateFormat("hh:mmaa", Locale.US).format(dateObj);
                 } catch (final ParseException e) {
@@ -358,9 +354,9 @@ public class ScheduleItem extends Fragment {
                 }
             } else if (DateFormat.is24HourFormat(getActivity())) {
                 try {
-                    final SimpleDateFormat sdf = new SimpleDateFormat("H:m");
+                    final SimpleDateFormat sdf = new SimpleDateFormat("H:m", Locale.US);
                     final Date dateObj = sdf.parse(time);
-                    time = new SimpleDateFormat("HH:mm").format(dateObj);
+                    time = new SimpleDateFormat("HH:mm", Locale.US).format(dateObj);
                 } catch (final ParseException e) {
                     throw new IllegalArgumentException("Wrong time format given for DayData: " + time);
                 }

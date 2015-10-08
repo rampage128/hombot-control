@@ -91,8 +91,10 @@ public class HombotStatus {
         }
     }
 
-    public static HombotStatus getInstance(String response) {
-        HombotStatus status = new HombotStatus();
+    public static HombotStatus getInstance(String response, HombotStatus status) {
+        if (status == null) {
+            status = new HombotStatus();
+        }
         if (response != null) {
             status.parseStatus(response);
         }

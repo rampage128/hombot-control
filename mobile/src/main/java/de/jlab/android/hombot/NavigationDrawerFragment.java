@@ -136,9 +136,9 @@ public class NavigationDrawerFragment extends Fragment {
             if (sp.getBoolean(SettingsActivity.PREF_REMEMBER_SECTION, false)) {
                 mCurrentSelectedPosition = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, 0);
             }
+            // Select either the default item (0) or the last selected item.
+            selectItem(mCurrentSelectedPosition);
         }
-        // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
 
 
         mViewHolder.botAddress.setText(sp.getString(PREF_BOT_IP, null));

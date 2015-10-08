@@ -1,60 +1,52 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
 <!--
-        <item name="android:windowBackground">@color/ColorBg</item>
--->
-        <item name="colorPrimary">@color/ColorPrimary</item>
-        <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
-
-        <item name="android:actionBarStyle">@style/homactionbar</item>
-
         <item name="android:activatedBackgroundIndicator">@drawable/drawer_list_selector</item>
+-->
     </style>
 
-
-
-    <!-- ActionBar styles -->
-    <style name="homactionbar"
-        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/ColorPrimary</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:logo">@android:color/transparent</item>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="status_label">
-        <item name="android:textColor">@color/ColorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">48sp</item>
     </style>
 
     <style name="battery_label">
-        <item name="android:textColor">@color/ColorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">24sp</item>
     </style>
 
     <style name="header_label">
-        <item name="android:textColor">@color/ColorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
-
+<!--
     <style name="header_label_contrast" parent="@style/header_label">
         <item name="android:textColor">#ffffff</item>
     </style>
-
+-->
     <style name="control_button" parent="@android:style/Widget.Holo.Light.Button">
         <item name="android:background">@drawable/command_button</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
-<!--
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:paddingTop">32dp</item>
-        <item name="android:paddingBottom">32dp</item>
--->
         <item name="android:textAppearance">?android:attr/textAppearanceSmallInverse</item>
     </style>
-
+    <style name="AppTheme.NoActionBar.AppBarOverlay"
+        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+<!--
     <style name="joy_button">
         <item name="android:background">@null</item>
         <item name="android:textColor">#ffffff</item>
@@ -63,10 +55,11 @@
     </style>
 
     <style name="bot_text">
-        <item name="android:colorControlNormal">#ffffff</item>
-        <item name="android:colorControlActivated">#ffffff</item>
-        <item name="android:colorControlHighlight">#ffffff</item>
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorControlActivated">#ffffff</item>
+        <item name="colorControlHighlight">#ffffff</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+-->
 
 </resources>

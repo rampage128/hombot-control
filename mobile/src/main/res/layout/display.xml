@@ -5,7 +5,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:id="@+id/ct_status">
+    android:id="@+id/ct_status"
+    tools:showIn="@layout/fragment_section_status">
 
     <ImageView
         android:layout_width="56dp"

@@ -8,7 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ColorPrimaryDark"
+        android:background="@color/colorPrimaryDark"
         android:padding="16dp"
         android:id="@+id/bot_panel">
 
@@ -22,13 +22,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/bot_address"
                 android:id="@+id/textView"
-                style="@style/header_label_contrast" />
+                 /> <!-- style="@style/header_label_contrast" -->
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/bot_address"
-                style="@style/bot_text" />
+                 /> <!-- style="@style/bot_text" -->
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/bot_name"
-                    style="@style/header_label_contrast" />
+                     /> <!-- style="@style/header_label_contrast" -->
 
                 <FrameLayout
                     android:layout_width="0dp"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/bot_version"
-                    style="@style/header_label_contrast" />
+                     /> <!-- style="@style/header_label_contrast" -->
             </LinearLayout>
         </LinearLayout>
 

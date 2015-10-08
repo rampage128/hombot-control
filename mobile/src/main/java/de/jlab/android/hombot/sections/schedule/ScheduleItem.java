@@ -3,6 +3,7 @@ package de.jlab.android.hombot.sections.schedule;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -65,17 +66,17 @@ public class ScheduleItem extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param day  Parameter 1.
-     * @param time Parameter 2.
-     * @param mode Parameter 3.
      * @return A new instance of fragment ScheduleItem.
      */
     // TODO: Rename and change types and number of parameters
-    public static ScheduleItem newInstance(HombotSchedule.Weekday day, String time, HombotSchedule.Mode mode) {
+    public static ScheduleItem newInstance(HombotSchedule.Weekday day/*, String time, HombotSchedule.Mode mode*/) {
         ScheduleItem fragment = new ScheduleItem();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, day);
+/*
         args.putString(ARG_PARAM2, time);
         args.putSerializable(ARG_PARAM3, mode);
+*/
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,10 +86,23 @@ public class ScheduleItem extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("time", mTime);
+        outState.putSerializable("mode", mMode);
+    }
+
+    public void setDayChangeListener(DayChangedListener listener) {
+        mListener = listener;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDay = (HombotSchedule.Weekday) getArguments().getSerializable(ARG_PARAM1);
+
+/*
             mTime = getArguments().getString(ARG_PARAM2);
 
             // CONVERT 12 HOUR TO 24 HOUR FORMAT IF NECESSARY
@@ -103,6 +117,7 @@ public class ScheduleItem extends Fragment {
             }
 
             mMode = (HombotSchedule.Mode) getArguments().getSerializable(ARG_PARAM3);
+*/
         }
     }
 
@@ -120,6 +135,10 @@ public class ScheduleItem extends Fragment {
         mViewHolder.timeEdit = (EditText) view.findViewById(R.id.time_field);
         mViewHolder.check = (CheckBox) view.findViewById(R.id.time_check);
 
+        if (savedInstanceState != null) {
+            mTime = savedInstanceState.getString("time");
+            mMode = (HombotSchedule.Mode)savedInstanceState.getSerializable("mode");
+        }
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
@@ -147,16 +166,18 @@ public class ScheduleItem extends Fragment {
         });
 
         mViewHolder.timeEdit.setText(mTime);
-
         mViewHolder.timeEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TimePickerFragment newFragment = new TimePickerFragment();
                 newFragment.setEditText(mViewHolder.timeEdit);
+                newFragment.setScheduleItem(ScheduleItem.this);
                 newFragment.show(((MainActivity) getActivity()).getSupportFragmentManager(), "timePicker");
+
             }
         });
 
+        /*
         mViewHolder.timeEdit.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 changeDay();
@@ -168,6 +189,7 @@ public class ScheduleItem extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
+        */
 
         mViewHolder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -202,16 +224,38 @@ public class ScheduleItem extends Fragment {
         }
     }
 
+    public void update(String time, HombotSchedule.Mode mode, Context context) {
+        mTime = time;
+        mMode = mode;
+
+        mTime = time;
+
+        // CONVERT 12 HOUR TO 24 HOUR FORMAT IF NECESSARY
+        if (DateFormat.is24HourFormat(context) && mTime.matches(".*(AM|PM)")) {
+            try {
+                final SimpleDateFormat sdf = new SimpleDateFormat("hh:mmaa", Locale.US);
+                final Date dateObj = sdf.parse(mTime);
+                mTime = new SimpleDateFormat("HH:mm").format(dateObj);
+            } catch (final ParseException e) {
+                throw new IllegalArgumentException("Wrong time format given for DayData: " + mTime);
+            }
+        }
+
+        mMode = mode;
+    }
+
+/*
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+         try {
             mListener = (DayChangedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement DayChangedListener");
         }
-    }
+     }
+     */
 
     @Override
     public void onDetach() {
@@ -239,6 +283,7 @@ public class ScheduleItem extends Fragment {
             implements TimePickerDialog.OnTimeSetListener {
 
         private EditText mField;
+        private ScheduleItem mScheduleItem;
 
         public TimePickerFragment() {
 
@@ -246,6 +291,10 @@ public class ScheduleItem extends Fragment {
 
         public void setEditText(EditText field) {
             mField = field;
+        }
+
+        public void setScheduleItem(ScheduleItem scheduleItem) {
+            mScheduleItem = scheduleItem;
         }
 
         @Override
@@ -318,6 +367,7 @@ public class ScheduleItem extends Fragment {
             }
 
             mField.setText(time);
+            mScheduleItem.changeDay();
         }
     }
 

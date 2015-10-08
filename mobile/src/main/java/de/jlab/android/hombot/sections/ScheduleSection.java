@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
-import de.jlab.android.hombot.MainActivity;
-import de.jlab.android.hombot.NavigationDrawerFragment;
+import java.util.EnumMap;
+
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.core.HombotSchedule;
@@ -23,7 +22,7 @@ import de.jlab.android.hombot.sections.schedule.ScheduleItem;
  * Use the {@link ScheduleSection#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScheduleSection extends SectionFragment {
+public class ScheduleSection extends SectionFragment implements ScheduleItem.DayChangedListener {
 
     private static class ViewHolder {
         Button saveButton;
@@ -32,10 +31,18 @@ public class ScheduleSection extends SectionFragment {
 
     private HombotSchedule mSchedule;
 
+    private EnumMap<HombotSchedule.Weekday, ScheduleItem> mScheduleItemMap = new EnumMap(HombotSchedule.Weekday.class);
+
+
     public static ScheduleSection newInstance(int sectionNumber) {
         ScheduleSection fragment = new ScheduleSection();
         fragment.register(sectionNumber);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -44,7 +51,6 @@ public class ScheduleSection extends SectionFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_section_schedule, container, false);
 
-        readSchedule();
         //LinearLayout schedule = (LinearLayout) view.findViewById(R.id.schedule);
 
         mViewHolder = new ViewHolder();
@@ -56,6 +62,27 @@ public class ScheduleSection extends SectionFragment {
                 writeSchedule();
             }
         });
+
+        FragmentManager fragmentManager = getChildFragmentManager();
+        if (fragmentManager.findFragmentByTag("schedule_item") == null) {
+            for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
+                ScheduleItem item = ScheduleItem.newInstance(day);
+                item.setDayChangeListener(this);
+                mScheduleItemMap.put(day, item);
+                fragmentManager.beginTransaction().add(R.id.schedule, item, "schedule_item").commit();
+            }
+            readSchedule();
+        }
+        /*
+        else {
+            mScheduleItemMap = (EnumMap<HombotSchedule.Weekday, ScheduleItem>)savedInstanceState.getSerializable("item_map");
+            for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
+                ScheduleItem item = mScheduleItemMap.get(day);
+                fragmentManager.beginTransaction().add(R.id.schedule, item, "schedule_item").commit();
+            }
+        }
+        */
+
 
         return view;
     }
@@ -69,10 +96,21 @@ public class ScheduleSection extends SectionFragment {
             public void run() {
                 mSchedule = ((SectionInteractionListener) getActivity()).requestSchedule();
                 for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
+                    mScheduleItemMap.get(day).update(mSchedule.getDayTime(day), mSchedule.getDayMode(day), getActivity());
+                }
+/*
+                FragmentManager fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
+                List<Fragment> all = fragmentManager.getFragments();
+                if (all != null) {
+                    for (Fragment frag : all) {
+                        fragmentManager.beginTransaction().remove(frag).commit();
+                    }
+                }
+                for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
                     ScheduleItem item = ScheduleItem.newInstance(day, mSchedule.getDayTime(day), mSchedule.getDayMode(day));
-                    FragmentManager fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
                     fragmentManager.beginTransaction().add(R.id.schedule, item, null).commit();
                 }
+*/
             }
         }).start();
     }

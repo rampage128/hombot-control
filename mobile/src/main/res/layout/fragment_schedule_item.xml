@@ -5,10 +5,10 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/header_label"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/header_label" />
+        android:id="@+id/header_label" /><!-- style="@style/header_label"-->
 
     <LinearLayout
         android:orientation="horizontal"

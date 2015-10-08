@@ -56,7 +56,11 @@ public abstract class SectionFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mColorizer = new Colorizer(getActivity());
-        mColorizer.colorize(this, false);
+        //mColorizer.colorize(this, false);
+    }
+
+    public int getSectionId() {
+        return getArguments().getInt(ARG_SECTION_NUMBER);
     }
 
     public abstract View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +77,7 @@ public abstract class SectionFragment extends Fragment {
             mListener = (SectionInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement SectionInteractionListener");
         }
         mListener.onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
     }
@@ -103,6 +107,7 @@ public abstract class SectionFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface SectionInteractionListener {
+        @Deprecated
         public void onSectionAttached(int section);
 
         public void sendCommand(Command command);

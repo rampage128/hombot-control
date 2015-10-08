@@ -14,7 +14,7 @@
     </item>
     <item android:gravity="left|center_vertical" android:left="16dp">
         <bitmap
-            android:src="@drawable/ic_keyboard_arrow_left_white_48dp"
+            android:src="@drawable/ic_joy_left"
             android:tileMode="disabled"
             android:gravity="left"
             android:width="48dp"
@@ -22,7 +22,7 @@
     </item>
     <item android:gravity="right|center_vertical" android:right="16dp">
         <bitmap
-            android:src="@drawable/ic_keyboard_arrow_right_white_48dp"
+            android:src="@drawable/ic_joy_right"
             android:tileMode="disabled"
             android:gravity="right"
             android:width="48dp"
@@ -30,7 +30,7 @@
     </item>
     <item android:gravity="top|center_horizontal" android:top="16dp">
         <bitmap
-            android:src="@drawable/ic_keyboard_arrow_up_white_48dp"
+            android:src="@drawable/ic_joy_up"
             android:tileMode="disabled"
             android:gravity="top"
             android:width="48dp"
@@ -38,7 +38,7 @@
     </item>
     <item android:gravity="bottom|center_horizontal" android:bottom="16dp">
         <bitmap
-            android:src="@drawable/ic_keyboard_arrow_down_white_48dp"
+            android:src="@drawable/ic_joy_down"
             android:tileMode="disabled"
             android:gravity="bottom"
             android:width="48dp"

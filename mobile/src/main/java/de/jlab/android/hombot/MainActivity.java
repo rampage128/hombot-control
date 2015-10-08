@@ -1,98 +1,284 @@
 package de.jlab.android.hombot;
 
-import android.app.Activity;
-
-import android.app.ActionBar;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import de.jlab.android.hombot.core.HombotMap;
 import de.jlab.android.hombot.core.HombotSchedule;
 import de.jlab.android.hombot.core.HombotStatus;
 import de.jlab.android.hombot.core.RequestEngine;
-import de.jlab.android.hombot.sections.schedule.ScheduleItem;
-import de.jlab.android.hombot.utils.Colorizer;
-
+import de.jlab.android.hombot.data.HombotDataContract;
+import de.jlab.android.hombot.data.HombotDataOpenHelper;
+import de.jlab.android.hombot.sections.JoySection;
+import de.jlab.android.hombot.sections.MapSection;
+import de.jlab.android.hombot.sections.ScheduleSection;
+import de.jlab.android.hombot.sections.StatusSection;
 
 public class MainActivity extends AppCompatActivity
-implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.SectionInteractionListener, RequestEngine.RequestListener, ScheduleItem.DayChangedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SectionFragment.SectionInteractionListener, RequestEngine.RequestListener {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private SectionFragment mSectionFragment;
+    public static final String PREF_BOT_IP = "bot_ip";
 
-    private RequestEngine mRequestEngine = null;
+    private static class ViewHolder {
+        View botPanel;
+        TextView botName;
+        TextView botVersion;
+        Spinner botSelect;
+        Toolbar windowToolbar;
+    }
+    private ViewHolder mViewHolder;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
+    RequestEngine mRequestEngine;
+
+    @Override
+    public void onWindowFocusChanged(boolean focused) {
+        if (focused) {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            String botAddress = sp.getString(NavigationDrawerFragment.PREF_BOT_IP, null);
+            mRequestEngine.setBotAddress(botAddress);
+            mRequestEngine.start(this);
+        } else {
+            mRequestEngine.stop();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mRequestEngine = new RequestEngine();
+
         setContentView(R.layout.activity_main);
 
-        // Set up Toolbar
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        mViewHolder = new ViewHolder();
+        mViewHolder.botPanel    = findViewById(R.id.bot_panel);
+        mViewHolder.botSelect  = (Spinner)findViewById(R.id.bot_select);
+        mViewHolder.botName     = (TextView)findViewById(R.id.bot_name);
+        mViewHolder.botVersion  = (TextView)findViewById(R.id.bot_version);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        /*
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(getResources().getColor(R.color.ColorPrimaryDark));
+        /* TODO IMPLEMENT EVENTS FOR CONTEXT SENSITIVE EXPANDABLE FAB WITH MAIN ACTIONS (CLEAN_START, HOME, CLEAN_SPOT ...)
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
         */
 
-        Colorizer colorizer = new Colorizer(this);
-        colorizer.colorize(this);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (getCurrentSection() == null) {
+            int lastSection = R.id.nav_status;
+            if (sp.getBoolean(SettingsActivity.PREF_REMEMBER_SECTION, false)) {
+                lastSection = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, R.id.nav_status);
+            }
+            switchSection(lastSection);
+        }
+
+        // FETCH BOTS
+        HombotDataOpenHelper dataHelper = new HombotDataOpenHelper(this);
+        final SQLiteDatabase db = dataHelper.getReadableDatabase();
+        Cursor botCursor = db.query(HombotDataContract.BotEntry.TABLE_NAME, new String[]{HombotDataContract.BotEntry._ID, HombotDataContract.BotEntry.COLUMN_NAME_NAME, HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS}, null, new String[0], null, null, HombotDataContract.BotEntry.COLUMN_NAME_NAME);
+        String[] queryCols=new String[]{ HombotDataContract.BotEntry._ID, HombotDataContract.BotEntry.COLUMN_NAME_NAME };
+        String[] adapterCols=new String[]{ HombotDataContract.BotEntry.COLUMN_NAME_NAME };
+        int[] adapterRowViews=new int[]{ android.R.id.text1 };
+        SimpleCursorAdapter sca = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, botCursor, adapterCols, adapterRowViews, 0);
+        sca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mViewHolder.botSelect.setAdapter(sca);
+
+        mViewHolder.botSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor)parent.getAdapter().getItem(position);
+                mRequestEngine.setBotAddress(cursor.getString(cursor.getColumnIndexOrThrow(HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS)));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        long recentBotId = sp.getLong(SettingsActivity.PREF_RECENT_BOT, -1);
+        if (sca.getCount() > 0) {
+            for (int i = 0; i < sca.getCount(); i++) {
+                if (recentBotId == sca.getItemId(i)) {
+                    mViewHolder.botSelect.setSelection(i);
+                }
+            }
+
+        } else {
+            startActivity(new Intent(this, BotManagerActivity.class));
+        }
+
+        /*
+        String botAddress = sp.getString(PREF_BOT_IP, null);
+        mViewHolder.botAddress.setText(botAddress);
+        mViewHolder.botAddress.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                String botAddress = s.toString();
+                sp.edit().putString(PREF_BOT_IP, botAddress).apply();
+                mRequestEngine.setBotAddress(botAddress);
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+
+        mViewHolder.botAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE)
+                    mViewHolder.botAddress.clearFocus();
+                return false;
+            }
+        });
+
+        mViewHolder.botAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                }
+            }
+        });
+*/
+
+
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        mSectionFragment = NavigationDrawerFragment.getSectionFragment(position);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, mSectionFragment)
-                .commit();
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
-    public void onBotAddressChanged(String address) {
-        mRequestEngine.setBotAddress(address);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
-    public void onSectionAttached(int number) {
-        setTitle(NavigationDrawerFragment.getSections(getResources())[number]);
-        // getSupportActionBar().setTitle(NavigationDrawerFragment.getSections(getResources())[number]);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if (id == R.id.nav_bots) {
+            startActivity(new Intent(this, BotManagerActivity.class));
+        } else {
+            switchSection(id);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    private void switchSection(int sectionId) {
+        if (sectionId == R.id.nav_joy) {
+            switchSection(JoySection.newInstance(R.id.nav_joy));
+        } else if (sectionId == R.id.nav_schedule) {
+            switchSection(ScheduleSection.newInstance(R.id.nav_schedule));
+        } else if (sectionId == R.id.nav_map) {
+            switchSection(MapSection.newInstance(R.id.nav_map));
+        } else {
+            // SWITCH TO DEFAULT IF NOT SURE: R.id.nav_status
+            switchSection(StatusSection.newInstance(R.id.nav_status));
+        }
+    }
+
+    private void switchSection(SectionFragment section) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.section_container, section, "main_content");
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.edit().putInt(SettingsActivity.PREF_RECENT_SECTION, section.getSectionId()).commit();
+    }
+
+    private Fragment getCurrentSection() {
+        return getSupportFragmentManager().findFragmentByTag("main_content");
+    }
+
+      ///////////////////////////
+     /// SECTION INTERACTION ///
+    ///////////////////////////
+
+    @Override
+    public void onSectionAttached(int section) {
+        // DEPRECATED
     }
 
     @Override
@@ -113,73 +299,22 @@ implements NavigationDrawerFragment.NavigationDrawerCallbacks, SectionFragment.S
     @Override
     public void setSchedule(HombotSchedule schedule) {
         mRequestEngine.updateSchedule(schedule);
-        Toast.makeText(this, R.string.schedule_saved, Toast.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.section_container), R.string.schedule_saved, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
-    public void restoreActionBar() {
-        //Toolbar toolbar = getSupportActionBar();
-        //getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        //toolbar.setDisplayShowTitleEnabled(true);
-        //getSupportActionBar().setTitle(mTitle);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean focused) {
-        if (focused) {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            String botAddress = sp.getString(NavigationDrawerFragment.PREF_BOT_IP, null);
-            onBotAddressChanged(botAddress);
-            mRequestEngine.start(this);
-        } else {
-            mRequestEngine.stop();
-        }
-    }
+    //////////////////////////////
+    /// REQUEST ENGINE EVENTS ///
+    ////////////////////////////
 
     @Override
     public void statusUpdate(HombotStatus status) {
-        if (mSectionFragment != null) {
-            mSectionFragment.statusUpdate(status);
+        mViewHolder.botName.setText(status.getNickname());
+        mViewHolder.botVersion.setText(status.getVersion());
+
+        Fragment fragment = getCurrentSection();
+        if (fragment instanceof SectionFragment) {
+            ((SectionFragment)fragment).statusUpdate(status);
         }
-
-        mNavigationDrawerFragment.statusUpdate(status);
-    }
-
-    @Override
-    public void clearScheduleDay(HombotSchedule.Weekday day) {
-        mSectionFragment.clearScheduleDay(day);
-    }
-
-    @Override
-    public void setScheduleDay(HombotSchedule.Weekday day, String time, HombotSchedule.Mode mode) {
-        mSectionFragment.setScheduleDay(day, time, mode);
     }
 }

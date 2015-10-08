@@ -14,6 +14,8 @@ import java.net.URL;
  */
 public class RequestEngine {
 
+    private HombotStatus mStatus;
+
     public enum Command {
         TURBO, MODE, HOME, REPEAT, START, PAUSE,
 
@@ -41,6 +43,7 @@ public class RequestEngine {
     }
 
     public HombotStatus requestStatus() {
+        String statusString = null;
         try {
             URL statusUrl = new URL("http://" + botAddress + "/status.txt");
             HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
@@ -52,10 +55,10 @@ public class RequestEngine {
                 total.append(line).append("\n");
             }
             urlConnection.disconnect();
-            return HombotStatus.getInstance(total.toString());
-        } catch (Exception e) {
-            return HombotStatus.getInstance(null);
-        }
+            statusString = total.toString();
+        } catch (Exception expected) {}
+
+        return HombotStatus.getInstance(statusString, mStatus);
     }
 
     public HombotMap requestMap(String mapName) {

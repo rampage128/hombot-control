@@ -139,6 +139,11 @@ public class StatusSection extends SectionFragment {
 
         mViewHolder.displayStatusText.setTextColor(getColorizer().getColorPrimary());
         mViewHolder.displayBatteryText.setTextColor(getColorizer().getColorPrimary());
+        getColorizer().colorize(mViewHolder.commandHome, false, false);
+        getColorizer().colorize(mViewHolder.commandMode, false, false);
+        getColorizer().colorize(mViewHolder.commandRepeat, false, false);
+        getColorizer().colorize(mViewHolder.commandTurbo, false, false);
+        getColorizer().colorize(mViewHolder.commandStartStop, false, false);
     }
 
     @Override

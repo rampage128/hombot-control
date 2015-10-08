@@ -208,6 +208,10 @@ public class JoySection extends SectionFragment {
         super.onViewCreated(view, savedInstanceState);
 
         getColorizer().tintBackground(mViewHolder.joy, getColorizer().getColorText());
+        getColorizer().colorize(mViewHolder.commandHome, false, false);
+        getColorizer().colorize(mViewHolder.commandSpiral, false, false);
+        getColorizer().colorize(mViewHolder.commandMySpace, false, false);
+        getColorizer().colorize(mViewHolder.commandTurbo, false, false);
     }
 
     private void handleAction(Runnable runner, MotionEvent event, Handler repeatedHandler) {

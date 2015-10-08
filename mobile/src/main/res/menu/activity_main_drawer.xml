@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group_sections" android:checkableBehavior="single">
+        <item android:id="@+id/nav_status" android:icon="@drawable/ic_section_status"
+            android:title="@string/section_status" />
+        <item android:id="@+id/nav_joy" android:icon="@drawable/ic_section_joy"
+            android:title="@string/section_joy" />
+        <item android:id="@+id/nav_schedule" android:icon="@drawable/ic_section_schedule"
+            android:title="@string/section_schedule" />
+        <item android:id="@+id/nav_map" android:icon="@drawable/ic_section_map"
+            android:title="@string/section_map" />
+    </group>
+
+    <group android:id="@+id/group_settings" android:checkableBehavior="single">
+        <item android:id="@+id/nav_bots" android:icon="@drawable/ic_section_bots"
+            android:title="@string/mybots" />
+        <item android:id="@+id/nav_settings" android:icon="@drawable/ic_section_settings"
+            android:title="@string/settings" />
+    </group>
+
+</menu>

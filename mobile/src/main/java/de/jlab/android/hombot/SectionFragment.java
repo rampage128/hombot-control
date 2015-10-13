@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.jlab.android.hombot.core.HombotMap;
-import de.jlab.android.hombot.core.HombotSchedule;
-import de.jlab.android.hombot.core.HombotStatus;
-import de.jlab.android.hombot.core.RequestEngine.Command;
+import java.util.List;
+
+import de.jlab.android.hombot.common.core.HombotMap;
+import de.jlab.android.hombot.common.core.HombotSchedule;
+import de.jlab.android.hombot.common.core.HombotStatus;
+import de.jlab.android.hombot.common.core.RequestEngine;
 import de.jlab.android.hombot.sections.StatusSection;
 import de.jlab.android.hombot.utils.Colorizer;
 
@@ -89,7 +91,7 @@ public abstract class SectionFragment extends Fragment {
         mListener = null;
     }
 
-    protected void sendCommand(Command command) {
+    protected void sendCommand(RequestEngine.Command command) {
         mListener.sendCommand(command);
     }
 
@@ -107,13 +109,16 @@ public abstract class SectionFragment extends Fragment {
         @Deprecated
         void onSectionAttached(int section);
 
-        void sendCommand(Command command);
+        void sendCommand(RequestEngine.Command command);
 
         HombotSchedule requestSchedule();
 
         HombotMap requestMap(String mapName);
 
+        List<String> requestMapList();
+
         void setSchedule(HombotSchedule schedule);
+
     }
 
 }

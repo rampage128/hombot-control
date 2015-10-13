@@ -1,6 +1,8 @@
 package de.jlab.android.hombot.sections;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +11,10 @@ import android.widget.Button;
 
 import java.util.EnumMap;
 
+import de.jlab.android.hombot.MainActivity;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
-import de.jlab.android.hombot.core.HombotSchedule;
+import de.jlab.android.hombot.common.core.HombotSchedule;
 import de.jlab.android.hombot.sections.schedule.ScheduleItem;
 
 /**
@@ -63,6 +66,13 @@ public class ScheduleSection extends SectionFragment implements ScheduleItem.Day
             }
         });
 
+        return view;
+    }
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+
         FragmentManager fragmentManager = getChildFragmentManager();
         if (fragmentManager.findFragmentByTag("schedule_item") == null) {
             for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
@@ -71,56 +81,48 @@ public class ScheduleSection extends SectionFragment implements ScheduleItem.Day
                 mScheduleItemMap.put(day, item);
                 fragmentManager.beginTransaction().add(R.id.schedule, item, "schedule_item").commit();
             }
-            readSchedule();
+            // FIXME: DIRTY HACK BECAUSE SCHEDULE WONT SHOW WHEN ACTIVITY IS RESUMED (IT EVEN CRASHES WHEN TURNING THE SCREEN) ... I HATE ANDROID FRAGMENT PERSISTENCE AND LIFECYLCE
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    readSchedule((MainActivity)context);
+                }
+            }, 500);
         }
-        /*
-        else {
-            mScheduleItemMap = (EnumMap<HombotSchedule.Weekday, ScheduleItem>)savedInstanceState.getSerializable("item_map");
-            for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
-                ScheduleItem item = mScheduleItemMap.get(day);
-                fragmentManager.beginTransaction().add(R.id.schedule, item, "schedule_item").commit();
-            }
-        }
-        */
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
 
-        return view;
     }
 
     private void writeSchedule() {
         ((SectionInteractionListener) getActivity()).setSchedule(mSchedule);
     }
 
-    private void readSchedule() {
+    private void readSchedule(final MainActivity context) {
         new Thread(new Runnable() {
             public void run() {
-                mSchedule = ((SectionInteractionListener) getActivity()).requestSchedule();
+                mSchedule = context.requestSchedule();
                 for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
-                    mScheduleItemMap.get(day).update(mSchedule.getDayTime(day), mSchedule.getDayMode(day), getActivity());
+                    mScheduleItemMap.get(day).update(mSchedule.getDayTime(day), mSchedule.getDayMode(day), (MainActivity)context);
                 }
-/*
-                FragmentManager fragmentManager = ((MainActivity) getContext()).getSupportFragmentManager();
-                List<Fragment> all = fragmentManager.getFragments();
-                if (all != null) {
-                    for (Fragment frag : all) {
-                        fragmentManager.beginTransaction().remove(frag).commit();
-                    }
-                }
-                for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
-                    ScheduleItem item = ScheduleItem.newInstance(day, mSchedule.getDayTime(day), mSchedule.getDayMode(day));
-                    fragmentManager.beginTransaction().add(R.id.schedule, item, null).commit();
-                }
-*/
             }
         }).start();
     }
 
     public void clearScheduleDay(HombotSchedule.Weekday day) {
-        mSchedule.clearDay(day);
+        if (mSchedule != null) {
+            mSchedule.clearDay(day);
+        }
     }
 
     public void setScheduleDay(HombotSchedule.Weekday day, String time, HombotSchedule.Mode mode) {
-        mSchedule.setDay(day, time, mode);
+        if (mSchedule != null) {
+            mSchedule.setDay(day, time, mode);
+        }
     }
 
 }

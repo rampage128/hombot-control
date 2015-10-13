@@ -23,10 +23,12 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import de.jlab.android.hombot.core.HombotMap;
-import de.jlab.android.hombot.core.HombotSchedule;
-import de.jlab.android.hombot.core.HombotStatus;
-import de.jlab.android.hombot.core.RequestEngine;
+import java.util.List;
+
+import de.jlab.android.hombot.common.core.HombotMap;
+import de.jlab.android.hombot.common.core.HombotSchedule;
+import de.jlab.android.hombot.common.core.HombotStatus;
+import de.jlab.android.hombot.core.HttpRequestEngine;
 import de.jlab.android.hombot.data.HombotDataContract;
 import de.jlab.android.hombot.data.HombotDataOpenHelper;
 import de.jlab.android.hombot.sections.JoySection;
@@ -35,7 +37,7 @@ import de.jlab.android.hombot.sections.ScheduleSection;
 import de.jlab.android.hombot.sections.StatusSection;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SectionFragment.SectionInteractionListener, RequestEngine.RequestListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SectionFragment.SectionInteractionListener, HttpRequestEngine.RequestListener {
 
     public static final String PREF_BOT_IP = "bot_ip";
 
@@ -48,14 +50,14 @@ public class MainActivity extends AppCompatActivity
     }
     private ViewHolder mViewHolder;
 
-    RequestEngine mRequestEngine;
+    HttpRequestEngine mRequestEngine;
 
     @Override
     public void onWindowFocusChanged(boolean focused) {
         if (focused) {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            String botAddress = sp.getString(PREF_BOT_IP, null);
-            mRequestEngine.setBotAddress(botAddress);
+            //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            //String botAddress = sp.getString(PREF_BOT_IP, null);
+            //mRequestEngine.setBotAddress(botAddress);
             mRequestEngine.start(this);
         } else {
             mRequestEngine.stop();
@@ -66,7 +68,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRequestEngine = new RequestEngine();
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        mRequestEngine = new HttpRequestEngine();
 
         setContentView(R.layout.activity_main);
 
@@ -99,15 +103,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (getCurrentSection() == null) {
-            int lastSection = R.id.nav_status;
-            if (sp.getBoolean(SettingsActivity.PREF_REMEMBER_SECTION, false)) {
-                lastSection = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, R.id.nav_status);
-            }
-            switchSection(lastSection);
-        }
-
         // FETCH BOTS
         HombotDataOpenHelper dataHelper = new HombotDataOpenHelper(this);
         final SQLiteDatabase db = dataHelper.getReadableDatabase();
@@ -122,6 +117,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor)parent.getAdapter().getItem(position);
+                sp.edit().putLong(SettingsActivity.PREF_RECENT_BOT, id).apply();
                 mRequestEngine.setBotAddress(cursor.getString(cursor.getColumnIndexOrThrow(HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS)));
             }
 
@@ -139,6 +135,16 @@ public class MainActivity extends AppCompatActivity
 
         } else {
             startActivity(new Intent(this, BotManagerActivity.class));
+        }
+
+        if (getCurrentSection() == null) {
+            int lastSection = R.id.nav_status;
+            if (sp.getBoolean(SettingsActivity.PREF_REMEMBER_SECTION, false)) {
+                lastSection = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, R.id.nav_status);
+            }
+            //navigationView.getMenu().performIdentifierAction(lastSection, 0);
+            navigationView.getMenu().findItem(lastSection).setChecked(true);
+            switchSection(lastSection, false);
         }
 
     }
@@ -186,7 +192,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_bots) {
             startActivity(new Intent(this, BotManagerActivity.class));
         } else {
-            switchSection(id);
+            switchSection(id, true);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -195,23 +201,25 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void switchSection(int sectionId) {
+    private void switchSection(int sectionId, boolean track) {
         if (sectionId == R.id.nav_joy) {
-            switchSection(JoySection.newInstance(R.id.nav_joy));
+            switchSection(JoySection.newInstance(R.id.nav_joy), track);
         } else if (sectionId == R.id.nav_schedule) {
-            switchSection(ScheduleSection.newInstance(R.id.nav_schedule));
+            switchSection(ScheduleSection.newInstance(R.id.nav_schedule), track);
         } else if (sectionId == R.id.nav_map) {
-            switchSection(MapSection.newInstance(R.id.nav_map));
+            switchSection(MapSection.newInstance(R.id.nav_map), track);
         } else {
             // SWITCH TO DEFAULT IF NOT SURE: R.id.nav_status
-            switchSection(StatusSection.newInstance(R.id.nav_status));
+            switchSection(StatusSection.newInstance(R.id.nav_status), track);
         }
     }
 
-    private void switchSection(SectionFragment section) {
+    private void switchSection(SectionFragment section, boolean track) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.section_container, section, "main_content");
-        transaction.addToBackStack(null);
+        if (track) {
+            transaction.addToBackStack(null);
+        }
         transaction.commit();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -232,7 +240,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void sendCommand(RequestEngine.Command command) {
+    public void sendCommand(HttpRequestEngine.Command command) {
         mRequestEngine.sendCommand(command);
     }
 
@@ -247,6 +255,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public List<String> requestMapList() {
+        return mRequestEngine.requestMapList();
+    }
+
+    @Override
     public void setSchedule(HombotSchedule schedule) {
         mRequestEngine.updateSchedule(schedule);
         Snackbar.make(findViewById(R.id.section_container), R.string.schedule_saved, Snackbar.LENGTH_LONG)
@@ -258,13 +271,17 @@ public class MainActivity extends AppCompatActivity
     ////////////////////////////
 
     @Override
-    public void statusUpdate(HombotStatus status) {
-        mViewHolder.botName.setText(status.getNickname());
-        mViewHolder.botVersion.setText(status.getVersion());
+    public void statusUpdate(final HombotStatus status) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                mViewHolder.botName.setText(status.getNickname());
+                mViewHolder.botVersion.setText(status.getVersion());
 
-        Fragment fragment = getCurrentSection();
-        if (fragment instanceof SectionFragment) {
-            ((SectionFragment)fragment).statusUpdate(status);
-        }
+                Fragment fragment = getCurrentSection();
+                if (fragment instanceof SectionFragment) {
+                    ((SectionFragment) fragment).statusUpdate(status);
+                }
+            }
+        });
     }
 }

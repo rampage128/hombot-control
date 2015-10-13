@@ -1,15 +1,9 @@
-package de.jlab.android.hombot.sections.joy;
+package de.jlab.android.hombot.common.utils;
 
 import android.graphics.Point;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.util.Vector;
-
-import de.jlab.android.hombot.core.RequestEngine;
-import de.jlab.android.hombot.utils.RepeatListener;
 
 /**
  * Created by frede_000 on 03.10.2015.
@@ -102,6 +96,14 @@ public class JoyTouchListener implements View.OnTouchListener {
         }
 
         return false;
+    }
+
+    public void stop() {
+        handler.removeCallbacks(handlerRunnable);
+        if (mCurrentAction != null) {
+            mCurrentAction.onRelease();
+            mCurrentAction = null;
+        }
     }
 
     public interface PushListener {

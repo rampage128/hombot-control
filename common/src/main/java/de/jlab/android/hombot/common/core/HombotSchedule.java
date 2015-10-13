@@ -1,4 +1,4 @@
-package de.jlab.android.hombot.core;
+package de.jlab.android.hombot.common.core;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

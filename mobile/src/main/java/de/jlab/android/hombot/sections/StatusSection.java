@@ -11,9 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import de.jlab.android.hombot.SectionFragment;
-import de.jlab.android.hombot.core.HombotStatus;
+import de.jlab.android.hombot.common.core.HombotStatus;
 import de.jlab.android.hombot.R;
-import de.jlab.android.hombot.core.RequestEngine;
+import de.jlab.android.hombot.core.HttpRequestEngine;
 
 /**
  * A {@link SectionFragment} subclass.
@@ -88,7 +88,7 @@ public class StatusSection extends SectionFragment {
 
         mViewHolder.commandTurbo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.TURBO);
+                sendCommand(HttpRequestEngine.Command.TURBO);
             }
         });
 
@@ -96,34 +96,34 @@ public class StatusSection extends SectionFragment {
             public void onClick(View v) {
                 if (isDocked) {
                     if (HombotStatus.Mode.ZIGZAG.equals(StatusSection.this.mode)) {
-                        sendCommand(RequestEngine.Command.MODE_CELLBYCELL);
+                        sendCommand(HttpRequestEngine.Command.MODE_CELLBYCELL);
                     } else {
-                        sendCommand(RequestEngine.Command.MODE_ZIGZAG);
+                        sendCommand(HttpRequestEngine.Command.MODE_ZIGZAG);
                     }
                 } else {
-                    sendCommand(RequestEngine.Command.MODE);
+                    sendCommand(HttpRequestEngine.Command.MODE);
                 }
             }
         });
 
         mViewHolder.commandHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.HOME);
+                sendCommand(HttpRequestEngine.Command.HOME);
             }
         });
 
         mViewHolder.commandRepeat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.REPEAT);
+                sendCommand(HttpRequestEngine.Command.REPEAT);
             }
         });
 
         mViewHolder.commandStartStop.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (isWorking) {
-                    sendCommand(RequestEngine.Command.PAUSE);
+                    sendCommand(HttpRequestEngine.Command.PAUSE);
                 } else {
-                    sendCommand(RequestEngine.Command.START);
+                    sendCommand(HttpRequestEngine.Command.START);
                 }
             }
         });

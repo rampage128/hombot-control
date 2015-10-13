@@ -1,4 +1,4 @@
-package de.jlab.android.hombot.core;
+package de.jlab.android.hombot.common.core;
 
 /**
  * Created by frede_000 on 02.10.2015.
@@ -25,9 +25,14 @@ public class HombotStatus {
     private String nickname = null;
     private String version = null;
 
+    private String mSourceString;
+
     private HombotStatus() {}
 
     private void parseStatus(String response) {
+
+        mSourceString = response;
+
         String[] lines = response.split("\n");
 
         for (String line : lines) {
@@ -99,6 +104,10 @@ public class HombotStatus {
             status.parseStatus(response);
         }
         return status;
+    }
+
+    public String getSourceString() {
+        return this.mSourceString;
     }
 
     public boolean getTurbo() {

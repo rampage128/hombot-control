@@ -16,8 +16,9 @@ import android.widget.RelativeLayout;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.SettingsActivity;
-import de.jlab.android.hombot.core.RequestEngine;
-import de.jlab.android.hombot.sections.joy.JoyTouchListener;
+import de.jlab.android.hombot.common.settings.SharedSettings;
+import de.jlab.android.hombot.core.HttpRequestEngine;
+import de.jlab.android.hombot.common.utils.JoyTouchListener;
 
 /**
  * A {@link SectionFragment} subclass.
@@ -58,12 +59,12 @@ public class JoySection extends SectionFragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    sendCommand(RequestEngine.Command.MODE_SPIRAL);
+                    sendCommand(HttpRequestEngine.Command.MODE_SPIRAL);
                     if (mInsta) {
                         try {
                             Thread.sleep(1500);
                         } catch (InterruptedException ignored) {}
-                        sendCommand(RequestEngine.Command.START);
+                        sendCommand(HttpRequestEngine.Command.START);
                     }
             }
         }
@@ -90,7 +91,7 @@ public class JoySection extends SectionFragment {
 
         mViewHolder.commandMySpace.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.MODE_MYSPACE);
+                sendCommand(HttpRequestEngine.Command.MODE_MYSPACE);
             }
         });
 
@@ -104,76 +105,76 @@ public class JoySection extends SectionFragment {
 
         mViewHolder.commandTurbo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.TURBO);
+                sendCommand(HttpRequestEngine.Command.TURBO);
             }
         });
 
         mViewHolder.commandHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendCommand(RequestEngine.Command.HOME);
+                sendCommand(HttpRequestEngine.Command.HOME);
             }
         });
 
-        int intervalDrive = Integer.parseInt(sp.getString(SettingsActivity.PREF_JOY_INTERVAL_DRIVE, "800"));
-        int intervalTurn = Integer.parseInt(sp.getString(SettingsActivity.PREF_JOY_INTERVAL_TURN, "800"));
+        int intervalDrive = Integer.parseInt(sp.getString(SharedSettings.PREF_JOY_INTERVAL_DRIVE, "800"));
+        int intervalTurn = Integer.parseInt(sp.getString(SharedSettings.PREF_JOY_INTERVAL_TURN, "800"));
 
         mViewHolder.joy.setOnTouchListener(new JoyTouchListener(intervalDrive, intervalTurn, new JoyTouchListener.PushListener[]{
                 new JoyTouchListener.PushListener() {
                     @Override
                     public void onPush() {
-                        sendCommand(RequestEngine.Command.JOY_FORWARD);
+                        sendCommand(HttpRequestEngine.Command.JOY_FORWARD);
                         Log.d("MOT", "F");
                     }
 
                     @Override
                     public void onRelease() {
-                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        sendCommand(HttpRequestEngine.Command.JOY_RELEASE);
                         Log.d("MOT", "-");
                     }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
                     public void onPush() {
-                        sendCommand(RequestEngine.Command.JOY_RIGHT);
+                        sendCommand(HttpRequestEngine.Command.JOY_RIGHT);
                         Log.d("MOT", "R");
                     }
 
                     @Override
                     public void onRelease() {
-                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        sendCommand(HttpRequestEngine.Command.JOY_RELEASE);
                         Log.d("MOT", "-");
                     }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
                     public void onPush() {
-                        sendCommand(RequestEngine.Command.JOY_BACK);
+                        sendCommand(HttpRequestEngine.Command.JOY_BACK);
                         Log.d("MOT", "B");
                     }
 
                     @Override
                     public void onRelease() {
-                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        sendCommand(HttpRequestEngine.Command.JOY_RELEASE);
                         Log.d("MOT", "-");
                     }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
                     public void onPush() {
-                        sendCommand(RequestEngine.Command.JOY_LEFT);
+                        sendCommand(HttpRequestEngine.Command.JOY_LEFT);
                         Log.d("MOT", "L");
                     }
 
                     @Override
                     public void onRelease() {
-                        sendCommand(RequestEngine.Command.JOY_RELEASE);
+                        sendCommand(HttpRequestEngine.Command.JOY_RELEASE);
                         Log.d("MOT", "-");
                     }
                 },
                 new JoyTouchListener.PushListener() {
                     @Override
                     public void onPush() {
-                        sendCommand(RequestEngine.Command.PAUSE);
+                        sendCommand(HttpRequestEngine.Command.PAUSE);
                         Log.d("MOT", "P");
                     }
 

@@ -55,8 +55,6 @@ public class SettingsActivity extends PreferenceActivity {
     public static final String PREF_COLOR_PRIMARY = "color_primary";
 
     public static final String PREF_JOY_INSTACLEAN = "joy_instaclean";
-    public static final String PREF_JOY_INTERVAL_TURN = "joy_turninterval";
-    public static final String PREF_JOY_INTERVAL_DRIVE = "joy_driveinterval";
 
     private AppCompatDelegate mDelegate;
 

@@ -8,6 +8,8 @@
 
     <string name="settings">Settings</string>
 
+    <string name="global_map">Global map</string>
+
     <string name="section_status">Status</string>
     <string name="section_joy">Control</string>
     <string name="section_schedule">Schedule</string>

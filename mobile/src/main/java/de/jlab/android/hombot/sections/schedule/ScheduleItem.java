@@ -1,5 +1,6 @@
 package de.jlab.android.hombot.sections.schedule;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -27,7 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.jlab.android.hombot.R;
-import de.jlab.android.hombot.core.HombotSchedule;
+import de.jlab.android.hombot.common.core.HombotSchedule;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -143,10 +144,12 @@ public class ScheduleItem extends Fragment {
         // Apply the adapter to the spinner
         mViewHolder.modeSpinner.setAdapter(adapter);
 
+        /*
         if (null != mMode) {
             int pos = adapter.getPosition(mMode.toString());
             mViewHolder.modeSpinner.setSelection(pos);
         }
+        */
 
         mViewHolder.modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -160,7 +163,7 @@ public class ScheduleItem extends Fragment {
             }
         });
 
-        mViewHolder.timeEdit.setText(mTime);
+        //mViewHolder.timeEdit.setText(mTime);
         mViewHolder.timeEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,20 +174,6 @@ public class ScheduleItem extends Fragment {
 
             }
         });
-
-        /*
-        mViewHolder.timeEdit.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                changeDay();
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-        */
 
         mViewHolder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -197,10 +186,12 @@ public class ScheduleItem extends Fragment {
             }
         });
 
+        /*
         boolean enabled = mViewHolder.timeEdit.getText().length() > 0;
         mViewHolder.check.setChecked(enabled);
         mViewHolder.timeEdit.setEnabled(enabled);
         mViewHolder.modeSpinner.setEnabled(enabled);
+        */
 
         return view;
     }
@@ -237,6 +228,23 @@ public class ScheduleItem extends Fragment {
         }
 
         mMode = mode;
+
+        ((Activity)context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mViewHolder.timeEdit.setText(mTime);
+
+                if (null != mMode) {
+                    int pos = ((ArrayAdapter) mViewHolder.modeSpinner.getAdapter()).getPosition(mMode.toString());
+                    mViewHolder.modeSpinner.setSelection(pos);
+                }
+
+                boolean enabled = mViewHolder.timeEdit.getText().length() > 0;
+                mViewHolder.check.setChecked(enabled);
+                mViewHolder.timeEdit.setEnabled(enabled);
+                mViewHolder.modeSpinner.setEnabled(enabled);
+            }
+        });
     }
 
 /*

@@ -3,9 +3,134 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:id="@+id/zoomin_button"
+            android:layout_gravity="center_vertical" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:id="@+id/zoomout_button"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/map_select"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
     <de.jlab.android.hombot.sections.map.MapView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:id="@+id/map"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="#888888" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="F"
+            android:id="@+id/vt_f"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#c8c8c8" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="C"
+            android:id="@+id/vt_c"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#969696" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="W"
+            android:id="@+id/vt_w"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#ffffffff" />
+
+        <FrameLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#444444"
+            android:visibility="visible"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="CL"
+            android:id="@+id/vt_cl"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#ffff00" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="WS"
+            android:id="@+id/vt_ws"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#ff00ff" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="LC"
+            android:id="@+id/vt_lc"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#0000ff" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="WF"
+            android:id="@+id/vt_wf"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#00ff00" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="CO"
+            android:id="@+id/vt_co"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#ff0000" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="SL"
+            android:id="@+id/vt_sl"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#000000"
+            android:textColor="#ffffffff" />
+
+    </LinearLayout>
 </LinearLayout>

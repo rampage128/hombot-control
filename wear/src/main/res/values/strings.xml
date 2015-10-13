@@ -3,4 +3,5 @@
     <string name="title_activity_main">Hombot Control</string>
 
     <string name="undock">UNDOCK</string>
+    <string name="stop_cleaning">PAUSE %1$s</string>
 </resources>

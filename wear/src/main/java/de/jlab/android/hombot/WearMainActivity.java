@@ -1,6 +1,8 @@
 package de.jlab.android.hombot;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -69,6 +71,8 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
         mViewHolder.arrowLeft = (ImageView)findViewById(R.id.arrow_left);
         mViewHolder.loader = (ProgressBar)findViewById(R.id.loader);
 
+        mViewHolder.loader.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
         mViewHolder.container.setOnTouchListener(null);
     }
 
@@ -83,21 +87,29 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
             if (mJoyListener != null) {
                 mJoyListener.stop();
             }
-            if (HombotStatus.Status.CHARGING.equals(status.getStatus())) {
+            if (HombotStatus.Status.CHARGING.equals(status.getStatus()) || HombotStatus.Status.WORKING.equals(status.getStatus())) {
                 mViewHolder.joyTop.setVisibility(View.INVISIBLE);
                 mViewHolder.joyRight.setVisibility(View.INVISIBLE);
                 mViewHolder.joyLeft.setVisibility(View.INVISIBLE);
                 mViewHolder.joyBottom.setVisibility(View.VISIBLE);
                 mViewHolder.loader.setVisibility(View.INVISIBLE);
                 mViewHolder.textBottom.setVisibility(View.VISIBLE);
-                mViewHolder.textBottom.setText(getString(R.string.undock));
 
                 mViewHolder.arrowTop.setVisibility(View.INVISIBLE);
                 mViewHolder.arrowRight.setVisibility(View.INVISIBLE);
                 mViewHolder.arrowBottom.setVisibility(View.INVISIBLE);
                 mViewHolder.arrowLeft.setVisibility(View.INVISIBLE);
 
-                mJoyListener = new DockedTouchListener(intervalDrive, intervalTurn);
+                if (HombotStatus.Status.CHARGING.equals(status.getStatus())) {
+                    mViewHolder.textBottom.setText(getString(R.string.undock));
+                    mJoyListener = new DockedTouchListener(intervalDrive, intervalTurn);
+                } else {
+                    mViewHolder.loader.setVisibility(View.VISIBLE);
+                    mViewHolder.textBottom.setText(getString(R.string.stop_cleaning, status.getMode().name()));
+                    mJoyListener = new WorkingTouchListener(intervalDrive, intervalTurn);
+                }
+
+
             } else if (HombotStatus.Status.OFFLINE.equals(status.getStatus()) || HombotStatus.Status.DOCKING.equals(status.getStatus()) || HombotStatus.Status.UNDOCKING.equals(status.getStatus())) {
                 mViewHolder.joyTop.setVisibility(View.INVISIBLE);
                 mViewHolder.joyRight.setVisibility(View.INVISIBLE);
@@ -112,6 +124,7 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
                 }
                 mJoyListener = null;
             } else {
+
                 mViewHolder.joyTop.setVisibility(View.VISIBLE);
                 mViewHolder.joyRight.setVisibility(View.VISIBLE);
                 mViewHolder.joyLeft.setVisibility(View.VISIBLE);
@@ -259,6 +272,51 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
 
                         @Override
                         public void onRelease() { /* NO RELEASE FOR CENTER COMMAND */ }
+                    }
+            });
+        }
+    }
+
+    private class WorkingTouchListener extends JoyTouchListener {
+
+        public WorkingTouchListener(int driveInterval, int turnInterval) {
+            super(driveInterval, turnInterval, new JoyTouchListener.PushListener[] {
+                    new JoyTouchListener.PushListener() {
+                        @Override
+                        public void onPush() {}
+
+                        @Override
+                        public void onRelease() {}
+                    },
+                    new JoyTouchListener.PushListener() {
+                        @Override
+                        public void onPush() {}
+
+                        @Override
+                        public void onRelease() {}
+                    },
+                    new JoyTouchListener.PushListener() {
+                        @Override
+                        public void onPush() {
+                            mWearRequestEngine.sendCommand(RequestEngine.Command.PAUSE);
+                        }
+
+                        @Override
+                        public void onRelease() {}
+                    },
+                    new JoyTouchListener.PushListener() {
+                        @Override
+                        public void onPush() {}
+
+                        @Override
+                        public void onRelease() {}
+                    },
+                    new JoyTouchListener.PushListener() {
+                        @Override
+                        public void onPush() {}
+
+                        @Override
+                        public void onRelease() {}
                     }
             });
         }

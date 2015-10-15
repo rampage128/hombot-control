@@ -96,9 +96,26 @@ public class HombotStatus {
         }
     }
 
+    private void reset() {
+        status = Status.OFFLINE;
+        mode = Mode.ZIGZAG;
+        version = null;
+        nickname = null;
+        turbo = false;
+        repeat = false;
+        battery = 0;
+        cpuIdle = 0;
+        cpuNice = 0;
+        cpuSys = 0;
+        cpuUser = 0;
+    }
+
+
     public static HombotStatus getInstance(String response, HombotStatus status) {
         if (status == null) {
             status = new HombotStatus();
+        } else {
+            status.reset();
         }
         if (response != null) {
             status.parseStatus(response);

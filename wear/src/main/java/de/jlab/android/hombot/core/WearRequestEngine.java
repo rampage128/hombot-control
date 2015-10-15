@@ -1,18 +1,24 @@
 package de.jlab.android.hombot.core;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.data.FreezableUtils;
 import com.google.android.gms.wearable.CapabilityApi;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -22,11 +28,12 @@ import de.jlab.android.hombot.common.core.HombotSchedule;
 import de.jlab.android.hombot.common.core.HombotStatus;
 import de.jlab.android.hombot.common.core.RequestEngine;
 import de.jlab.android.hombot.common.wear.WearMessages;
+import de.jlab.android.hombot.data.WearBot;
 
 /**
  * Created by frede_000 on 09.10.2015.
  */
-public class WearRequestEngine extends RequestEngine implements MessageApi.MessageListener {
+public class WearRequestEngine extends RequestEngine implements MessageApi.MessageListener, DataApi.DataListener {
 
 
 
@@ -56,10 +63,9 @@ public class WearRequestEngine extends RequestEngine implements MessageApi.Messa
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (reconnect()) {
+                if (internalConnect()) {
                     retrieveDeviceNode();
                     Wearable.MessageApi.sendMessage(mGoogleApiClient, mNodeId, path, data);
-                    Log.d(getClass().getSimpleName(), path);
                 }
             }
         }).start();
@@ -85,23 +91,31 @@ public class WearRequestEngine extends RequestEngine implements MessageApi.Messa
                 .addApi(Wearable.API)
                 .build();
         Wearable.MessageApi.addListener(mGoogleApiClient, WearRequestEngine.this);
+        Wearable.DataApi.addListener(mGoogleApiClient, WearRequestEngine.this);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                reconnect();
+                internalConnect();
             }
         }).start();
     }
 
     public void disconnect() {
         Wearable.MessageApi.removeListener(mGoogleApiClient, this);
+        Wearable.DataApi.removeListener(mGoogleApiClient, this);
         mGoogleApiClient.disconnect();
     }
 
-    private boolean reconnect() {
-        return mGoogleApiClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS).isSuccess();
+    private boolean internalConnect() {
+        return mGoogleApiClient.isConnected() || mGoogleApiClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS).isSuccess();
     }
 
+    public void selectBot(String address) {
+        if (address == null) {
+            return;
+        }
+        sendWearMessage(WearMessages.MESSAGE_BOT_SELECT, address.getBytes());
+    }
 
     ///////////////////////////////
     /// REQUEST ENGINE ////////////
@@ -149,6 +163,10 @@ public class WearRequestEngine extends RequestEngine implements MessageApi.Messa
       ///////////////////////////////
      /// WEAR CONNECTION ///////////
     ///////////////////////////////
+    public void requestBotList() {
+        sendWearMessage(WearMessages.MESSAGE_BOT_LIST, null);
+    }
+
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
@@ -157,4 +175,35 @@ public class WearRequestEngine extends RequestEngine implements MessageApi.Messa
             getListener().statusUpdate(status);
         }
     }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        final List<DataEvent> events = FreezableUtils.freezeIterable(dataEventBuffer);
+        for(DataEvent event : events) {
+            if (WearMessages.MESSAGE_BOT_LIST.equalsIgnoreCase(event.getDataItem().getUri().getPath())) {
+                final DataMap map = DataMapItem.fromDataItem(event.getDataItem()).getDataMap();
+
+                ArrayList<DataMap> botList = map.getDataMapArrayList(WearMessages.MAPENTRY_BOT_LIST);
+
+                WearBot[] bots = new WearBot[botList.size()];
+                for (int i = 0; i < botList.size(); i++) {
+                    bots[i] = new WearBot(botList.get(i));
+                }
+
+                getListener().updateBotList(bots);
+            }
+        }
+    }
+
+    @Override
+    protected WearRequestListener getListener() {
+        return (WearRequestListener)super.getListener();
+    }
+
+    public interface WearRequestListener extends RequestListener {
+        void updateBotList(WearBot[] bots);
+    }
+
+
+
 }

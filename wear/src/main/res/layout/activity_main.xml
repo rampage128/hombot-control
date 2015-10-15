@@ -3,112 +3,132 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:id="@+id/container"
+    android:layout_height="match_parent"
     tools:context="de.jlab.android.hombot.WearMainActivity" tools:deviceIds="wear"
     android:background="#dedede">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/container">
 
-        <FrameLayout android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/wear_top"
-            android:layout_alignParentTop="true"
-            android:id="@+id/joy_top"
-            android:layout_weight="1" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/arrow_up"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_joy_up" />
-        </FrameLayout>
-
-        <FrameLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/wear_bottom"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/joy_bottom"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
-            <TextView
+            <FrameLayout android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/wear_top"
+                android:layout_alignParentTop="true"
+                android:id="@+id/joy_top"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/arrow_up"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_joy_up" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/wear_bottom"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/joy_bottom"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/text_bottom"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/arrow_bottom"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:src="@drawable/ic_joy_down"
+                    android:layout_marginBottom="8dp" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/wear_left"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/joy_left"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/arrow_left"
+                    android:layout_gravity="left|center_vertical"
+                    android:src="@drawable/ic_joy_left"
+                    android:layout_marginLeft="8dp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/wear_right"
+                android:layout_alignParentRight="true"
+                android:id="@+id/joy_right"
+                android:layout_weight="1" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/arrow_right"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_joy_right"
+                    android:layout_marginRight="8dp" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="128px"
+            android:layout_height="128px"
+            android:background="@drawable/wear_button"
+            android:layout_alignParentLeft="false"
+            android:layout_centerInParent="true"
+            android:id="@+id/joy_center" >
+
+            <ProgressBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/text_bottom"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:gravity="center" />
+                android:id="@+id/loader"
+                android:layout_gravity="center" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/arrow_bottom"
-                android:layout_gravity="bottom|center_horizontal"
-                android:src="@drawable/ic_joy_down"
-                android:layout_marginBottom="8dp" />
+                android:id="@+id/imageView"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_overlay" />
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/wear_left"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/joy_left"
-            android:layout_weight="1" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/arrow_left"
-                android:layout_gravity="left|center_vertical"
-                android:src="@drawable/ic_joy_left"
-                android:layout_marginLeft="8dp" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/wear_right"
-            android:layout_alignParentRight="true"
-            android:id="@+id/joy_right"
-            android:layout_weight="1" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/arrow_right"
-                android:layout_gravity="center_vertical|right"
-                android:src="@drawable/ic_joy_right"
-                android:layout_marginRight="8dp" />
-        </FrameLayout>
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="128px"
-        android:layout_height="128px"
-        android:background="@drawable/wear_button"
-        android:layout_alignParentLeft="false"
-        android:layout_centerInParent="true"
-        android:id="@+id/joy_center" >
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/loader"
-            android:layout_gravity="center" />
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:name="de.jlab.android.hombot.OverlayFragment"
+        android:id="@+id/overlay_fragment"
+        tools:layout="@layout/fragment_overlay" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package de.jlab.android.hombot.data;
+package de.jlab.android.hombot.common.data;
 
 import android.provider.BaseColumns;
 

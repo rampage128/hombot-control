@@ -28,9 +28,10 @@ import java.util.List;
 import de.jlab.android.hombot.common.core.HombotMap;
 import de.jlab.android.hombot.common.core.HombotSchedule;
 import de.jlab.android.hombot.common.core.HombotStatus;
+import de.jlab.android.hombot.common.settings.SharedSettings;
 import de.jlab.android.hombot.core.HttpRequestEngine;
-import de.jlab.android.hombot.data.HombotDataContract;
-import de.jlab.android.hombot.data.HombotDataOpenHelper;
+import de.jlab.android.hombot.common.data.HombotDataContract;
+import de.jlab.android.hombot.common.data.HombotDataOpenHelper;
 import de.jlab.android.hombot.sections.JoySection;
 import de.jlab.android.hombot.sections.MapSection;
 import de.jlab.android.hombot.sections.ScheduleSection;
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor)parent.getAdapter().getItem(position);
-                sp.edit().putLong(SettingsActivity.PREF_RECENT_BOT, id).apply();
+                sp.edit().putLong(SharedSettings.PREF_RECENT_BOT, id).apply();
                 mRequestEngine.setBotAddress(cursor.getString(cursor.getColumnIndexOrThrow(HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS)));
             }
 
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        long recentBotId = sp.getLong(SettingsActivity.PREF_RECENT_BOT, -1);
+        long recentBotId = sp.getLong(SharedSettings.PREF_RECENT_BOT, -1);
         if (sca.getCount() > 0) {
             for (int i = 0; i < sca.getCount(); i++) {
                 if (recentBotId == sca.getItemId(i)) {

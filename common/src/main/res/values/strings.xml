@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">HombotCommon</string>
+
+    <string name="status_offline">Offline</string>
+    <string name="status_standby">Standby</string>
+    <string name="status_charging">Charging</string>
+    <string name="status_undocking">Undocking</string>
+    <string name="status_docking">Docking</string>
+    <string name="status_working">Working</string>
+    <string name="status_pause">Pause</string>
+    <string name="status_homing">Homing</string>
 </resources>

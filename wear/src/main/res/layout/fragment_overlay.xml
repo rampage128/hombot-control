@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000"
+    android:id="@+id/overlay"
+    android:clickable="true">
+
+    <FrameLayout
+        android:layout_width="128px"
+        android:layout_height="128px"
+        android:background="@drawable/wear_close"
+        android:layout_alignParentLeft="false"
+        android:layout_centerInParent="true"
+        android:id="@+id/overlay_close" >
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/wear_bottom"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+
+            <FrameLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:layout_gravity="center">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/bot_select"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/overlay_status"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="24dp" />
+            </FrameLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
+
+        <FrameLayout
+            android:layout_width="128px"
+            android:layout_height="128px"
+            android:id="@+id/overlay_button1"
+            android:background="@drawable/wear_button"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="48dp"
+            android:layout_marginLeft="-8dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/overlay_icon1"
+                android:src="@drawable/ic_action_mode_zigzag"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="128px"
+            android:layout_height="128px"
+            android:id="@+id/overlay_button2"
+            android:background="@drawable/wear_button"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="22dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/overlay_icon2"
+                android:src="@drawable/ic_action_pause"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="128px"
+            android:layout_height="128px"
+            android:id="@+id/overlay_button3"
+            android:background="@drawable/wear_button"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="22dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/overlay_icon3"
+                android:src="@drawable/ic_action_repeat"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="128px"
+            android:layout_height="128px"
+            android:id="@+id/overlay_button4"
+            android:background="@drawable/wear_button"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="48dp"
+            android:layout_marginRight="-8dp" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/overlay_icon4"
+                android:src="@drawable/ic_action_start"
+                android:layout_gravity="center" />
+        </FrameLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

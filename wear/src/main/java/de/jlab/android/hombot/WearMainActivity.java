@@ -1,5 +1,6 @@
 package de.jlab.android.hombot;
 
+import android.animation.Animator;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -8,7 +9,9 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -21,8 +24,9 @@ import de.jlab.android.hombot.common.core.RequestEngine;
 import de.jlab.android.hombot.common.settings.SharedSettings;
 import de.jlab.android.hombot.common.utils.JoyTouchListener;
 import de.jlab.android.hombot.core.WearRequestEngine;
+import de.jlab.android.hombot.data.WearBot;
 
-public class WearMainActivity extends WearableActivity implements RequestEngine.RequestListener {
+public class WearMainActivity extends WearableActivity implements WearRequestEngine.WearRequestListener, OverlayFragment.OverlayListener {
 
     private static class ViewHolder {
         RelativeLayout container;
@@ -49,6 +53,8 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
 
     private JoyTouchListener mJoyListener;
 
+    private OverlayFragment mOverlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +80,14 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
         mViewHolder.loader.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
         mViewHolder.container.setOnTouchListener(null);
+
+        mOverlay = (OverlayFragment)getFragmentManager().findFragmentById(R.id.overlay_fragment);
+        mOverlay.hide();
+    }
+
+    @Override
+    public void updateBotList(WearBot[] bots) {
+        mOverlay.updateBotList(bots, this);
     }
 
     @Override
@@ -87,6 +101,14 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
             if (mJoyListener != null) {
                 mJoyListener.stop();
             }
+            mViewHolder.joyCenter.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    mOverlay.show();
+                    return false;
+                }
+            });
+
             if (HombotStatus.Status.CHARGING.equals(status.getStatus()) || HombotStatus.Status.WORKING.equals(status.getStatus())) {
                 mViewHolder.joyTop.setVisibility(View.INVISIBLE);
                 mViewHolder.joyRight.setVisibility(View.INVISIBLE);
@@ -142,13 +164,20 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
         }
         mBotStatus = status;
         mViewHolder.container.setOnTouchListener(mJoyListener);
+
+        mOverlay.statusUpdate(status);
     }
+
+
 
     @Override
     protected void onStart() {
         super.onStart();
         mWearRequestEngine.connect(this);
         mWearRequestEngine.start(this);
+        statusUpdate(HombotStatus.getInstance(null, null));
+        requestBotList();
+        selectBot(null);
     }
 
     @Override
@@ -159,6 +188,34 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
     }
 
       ////////////////////////////////////
+     /// OVERLAY CALLBACKS //////////////
+    ///////////////////////////////////
+
+    @Override
+    public void sendCommand(RequestEngine.Command command) {
+        mWearRequestEngine.sendCommand(command);
+    }
+
+    @Override
+    public void selectBot(WearBot bot) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String botAddress = null;
+        if (bot != null) {
+            botAddress = bot.getAddress();
+        } else {
+            botAddress = sp.getString(SharedSettings.PREF_RECENT_BOT, null);
+        }
+
+        mWearRequestEngine.selectBot(botAddress);
+        sp.edit().putString(SharedSettings.PREF_RECENT_BOT, botAddress).apply();
+    }
+
+    @Override
+    public void requestBotList() {
+        mWearRequestEngine.requestBotList();
+    }
+
+    ////////////////////////////////////
      /// TOUCH LISTENERS ////////////////
     ///////////////////////////////////
 
@@ -266,9 +323,7 @@ public class WearMainActivity extends WearableActivity implements RequestEngine.
                     },
                     new JoyTouchListener.PushListener() {
                         @Override
-                        public void onPush() {
-                            Log.d("MOT", "SHOW OVERFLOW");
-                        }
+                        public void onPush() {}
 
                         @Override
                         public void onRelease() { /* NO RELEASE FOR CENTER COMMAND */ }

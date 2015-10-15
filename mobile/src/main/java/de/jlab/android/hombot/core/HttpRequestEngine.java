@@ -217,6 +217,9 @@ public class HttpRequestEngine extends RequestEngine {
 
     public void setBotAddress(String address) {
         this.mBotAddress = address;
+        if (getListener() != null) {
+            getListener().statusUpdate(HombotStatus.getInstance(null, null));
+        }
     }
 
 }

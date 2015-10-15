@@ -49,7 +49,6 @@ public class SettingsActivity extends PreferenceActivity {
 
     public static final String PREF_REMEMBER_SECTION = "remember_section";
     public static final String PREF_RECENT_SECTION = "recent_section";
-    public static final String PREF_RECENT_BOT = "recent_bot";
 
     public static final String PREF_COLOR_THEME = "color_theme";
     public static final String PREF_COLOR_PRIMARY = "color_primary";

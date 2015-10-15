@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.jlab.android.hombot.R;
+import de.jlab.android.hombot.common.data.HombotDataContract;
 
 /**
  * Created by frede_000 on 08.10.2015.

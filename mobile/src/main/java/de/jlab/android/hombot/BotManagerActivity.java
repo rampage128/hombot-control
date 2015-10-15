@@ -17,8 +17,8 @@ import android.widget.ListView;
 
 import de.jlab.android.hombot.data.BotCursorAdapter;
 import de.jlab.android.hombot.data.EditBotDialog;
-import de.jlab.android.hombot.data.HombotDataContract;
-import de.jlab.android.hombot.data.HombotDataOpenHelper;
+import de.jlab.android.hombot.common.data.HombotDataContract;
+import de.jlab.android.hombot.common.data.HombotDataOpenHelper;
 
 public class BotManagerActivity extends AppCompatActivity implements EditBotDialog.BotEditDialogListener {
 

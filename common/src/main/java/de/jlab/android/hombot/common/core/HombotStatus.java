@@ -108,6 +108,7 @@ public class HombotStatus {
         cpuNice = 0;
         cpuSys = 0;
         cpuUser = 0;
+        mSourceString = null;
     }
 
 

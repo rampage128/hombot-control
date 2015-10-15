@@ -235,6 +235,22 @@ public class OverlayFragment extends Fragment {
         }
         mBotStatus = status;
 
+        if (HombotStatus.Status.STANDBY.equals(status.getStatus())) {
+            mViewHolder.icon3.getDrawable().setAlpha(255);
+        } else {
+            if (status.getRepeat()) {
+                mViewHolder.icon3.getDrawable().setAlpha(255);
+            } else {
+                mViewHolder.icon3.getDrawable().setAlpha(128);
+            }
+        }
+
+        if (status.getTurbo()) {
+            mViewHolder.icon2.getDrawable().setAlpha(255);
+        } else {
+            mViewHolder.icon2.getDrawable().setAlpha(128);
+        }
+
         setModeIcon();
 
     }

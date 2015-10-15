@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/overlay_icon2"
-                android:src="@drawable/ic_action_pause"
+                android:src="@drawable/ic_action_turbo"
                 android:layout_gravity="center" />
         </FrameLayout>
 

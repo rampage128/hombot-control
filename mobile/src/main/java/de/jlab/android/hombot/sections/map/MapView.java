@@ -1,15 +1,13 @@
 package de.jlab.android.hombot.sections.map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
+import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.OverScroller;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,6 +29,32 @@ public class MapView extends View {
     private MapDrawable mMap;
     private float mZoom = 2;
 
+    private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Canvas mMapCanvas;
+    private Bitmap mMapBitmap;
+    private Handler mDrawHandler = new Handler();
+    private Runnable mDrawRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+
+            if (mMapBitmap == null) {
+                mMapBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+            }
+            if (mMapCanvas == null) {
+                mMapCanvas = new Canvas(mMapBitmap);
+            }
+            mMapCanvas.drawColor(getContext().getResources().getColor(R.color.map_background));
+
+            if (mMap == null)
+                return;
+
+            for (MapViewLayer layer : mLayers.values()) {
+                layer.draw(mMapCanvas, mPaint, mZoom);
+            }
+        }
+    };
+
     private LinkedHashMap<LayerType, MapViewLayer> mLayers = new LinkedHashMap<>();
 
     public MapView(Context context) {
@@ -44,6 +68,7 @@ public class MapView extends View {
     public void toggleLayer(LayerType type) {
         MapViewLayer layer = mLayers.get(type);
         layer.setEnabled(!layer.isEnabled());
+        redraw();
         invalidate();
     }
 
@@ -91,6 +116,7 @@ public class MapView extends View {
                 float factor = Math.min(getMeasuredWidth() / mWidth, getMeasuredHeight() / mHeight);
                 mZoom = factor / 10;
 
+                redraw();
                 invalidate();
             }
         });
@@ -98,12 +124,14 @@ public class MapView extends View {
 
     public void zoomIn() {
         mZoom++;
+        redraw();
         invalidate();
     }
 
     public void zoomOut() {
         if (mZoom > 1) {
             mZoom--;
+            redraw();
             invalidate();
         }
     }
@@ -112,6 +140,12 @@ public class MapView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        canvas.drawColor(Color.TRANSPARENT);
+        if (mMapBitmap != null) {
+            canvas.drawBitmap(mMapBitmap, 0, 0, mPaint);
+        }
+
+        /*
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(mZoom);
 
@@ -125,6 +159,12 @@ public class MapView extends View {
         for (MapViewLayer layer : mLayers.values()) {
             layer.draw(canvas, paint, mZoom);
         }
+        */
+    }
+
+    private void redraw() {
+        mDrawHandler.removeCallbacks(mDrawRunnable);
+        mDrawHandler.post(mDrawRunnable);
     }
 
       ///////////////////////

@@ -14,6 +14,7 @@ import android.widget.OverScroller;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.common.core.HombotMap;
 
 /**
@@ -46,6 +47,11 @@ public class MapView extends View {
         invalidate();
     }
 
+    public boolean isLayerVisible(LayerType type) {
+        MapViewLayer layer = mLayers.get(type);
+        return layer.isEnabled();
+    }
+
     private void setLayer(LayerType layerType, ArrayList<? extends MapDrawable.MapDrawableItem> items, int color) {
         MapViewLayer layer = mLayers.get(layerType);
         if (layer == null) {
@@ -63,22 +69,24 @@ public class MapView extends View {
             @Override
             public void run() {
                 // RENDER FLOOR
-                setLayer(LayerType.FLOOR, mMap.floorCells, Color.LTGRAY);
-                setLayer(LayerType.CARPET, mMap.carpetCells, Color.DKGRAY);
-                setLayer(LayerType.WALL, mMap.wallCells, Color.WHITE);
+                setLayer(LayerType.FLOOR, mMap.floorCells, getContext().getResources().getColor(R.color.map_type_floor));
+                setLayer(LayerType.CARPET, mMap.carpetCells, getContext().getResources().getColor(R.color.map_type_carpet));
+                setLayer(LayerType.WALL, mMap.wallCells, getContext().getResources().getColor(R.color.map_type_wall));
 
                 // RENDER ADDITIONAL INFO
-                setLayer(LayerType.CLIMBABLE, mMap.climbCells, Color.YELLOW);
-                setLayer(LayerType.WALL_SNEAK, mMap.wallSneakCells, Color.MAGENTA);
-                setLayer(LayerType.LOW_CEILING, mMap.lowCeilingCells, Color.BLUE);
-                setLayer(LayerType.WALL_FOLLOWING, mMap.wallFollowingCells, Color.GREEN);
-                setLayer(LayerType.COLLISION, mMap.collisionCells, Color.RED);
-                setLayer(LayerType.SLOW, mMap.slowCells, Color.BLACK);
+
+                setLayer(LayerType.WALL_SNEAK, mMap.wallSneakCells, getContext().getResources().getColor(R.color.map_flag_wallsneak));
+                setLayer(LayerType.WALL_FOLLOWING, mMap.wallFollowingCells, getContext().getResources().getColor(R.color.map_flag_wallfollow));
+                setLayer(LayerType.COLLISION, mMap.collisionCells, getContext().getResources().getColor(R.color.map_flag_collidable));
+                setLayer(LayerType.SLOW, mMap.slowCells, getContext().getResources().getColor(R.color.map_flag_slow));
+
+                setLayer(LayerType.LOW_CEILING, mMap.lowCeilingCells, getContext().getResources().getColor(R.color.map_flag_abyss));
+                setLayer(LayerType.CLIMBABLE, mMap.climbCells, getContext().getResources().getColor(R.color.map_flag_climb));
 
                 // RENDER GRID
                 setLayer(LayerType.BLOCK, mMap.blocks, Color.DKGRAY);
 
-                int mWidth  = map.getOffsets().xMax - map.getOffsets().xMin + 1;
+                int mWidth = map.getOffsets().xMax - map.getOffsets().xMin + 1;
                 int mHeight = map.getOffsets().yMax - map.getOffsets().yMin + 1;
                 float factor = Math.min(getMeasuredWidth() / mWidth, getMeasuredHeight() / mHeight);
                 mZoom = factor / 10;

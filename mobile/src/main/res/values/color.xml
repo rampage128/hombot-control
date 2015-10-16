@@ -4,4 +4,22 @@
     <color name="colorPrimaryDark">#99033f</color>
     <color name="colorAccent">#009688</color>
     <color name="ColorBg">#444444</color>
+
+    <color name="fab_black_semi_transparent">#B2000000</color>
+    <color name="fab_half_black">#808080</color>
+    <color name="fab_white">#fafafa</color>
+    <color name="fab_white_pressed">#f1f1f1</color>
+
+    <color name="map_background">#90A4AE</color>
+
+    <color name="map_blocks">#80212121</color>
+    <color name="map_type_wall">#CFD8DC</color>
+    <color name="map_type_carpet">#795548</color>
+    <color name="map_type_floor">#ECEFF1</color>
+    <color name="map_flag_climb">#ccCDDC39</color>
+    <color name="map_flag_wallsneak">#80009688</color>
+    <color name="map_flag_abyss">#ccF44336</color>
+    <color name="map_flag_wallfollow">#8003A9F4</color>
+    <color name="map_flag_collidable">#80795548</color>
+    <color name="map_flag_slow">#80607D8B</color>
 </resources>

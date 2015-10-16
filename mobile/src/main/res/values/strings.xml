@@ -22,7 +22,16 @@
     <string name="bot_edit">Edit bot</string>
     <string name="bot_add">Add bot</string>
 
-
+    <string name="map_blocks">Blocks</string>
+    <string name="map_type_floor">Floor</string>
+    <string name="map_type_carpet">Carpet?</string>
+    <string name="map_type_wall">Wall</string>
+    <string name="map_flag_climb">Climbable object?</string>
+    <string name="map_flag_wallsneak">Sneak wall</string>
+    <string name="map_flag_abyss">Abyss</string>
+    <string name="map_flag_wallfollow">Follow wall</string>
+    <string name="map_flag_collidable">Collidable?</string>
+    <string name="map_flag_slow">Slow movement</string>
 
     <string name="command_turbo">Turbo</string>
     <string name="command_mode">Mode</string>

@@ -1,136 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:id="@+id/zoomin_button"
-            android:layout_gravity="center_vertical" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:id="@+id/zoomout_button"
-            android:layout_gravity="center_vertical" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/zoomin_button"
+                android:layout_gravity="center_vertical" />
 
-        <Spinner
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/map_select"
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/zoomout_button"
+                android:layout_gravity="center_vertical" />
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/map_select"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <de.jlab.android.hombot.sections.map.MapView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:id="@+id/map"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
+            android:background="@color/map_background" />
 
-    <de.jlab.android.hombot.sections.map.MapView
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:id="@+id/map"
-        android:layout_weight="1"
-        android:background="#888888" />
+    </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#aaffffff"
+        android:id="@+id/legend">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="F"
-            android:id="@+id/vt_f"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#c8c8c8" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="C"
-            android:id="@+id/vt_c"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#969696" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/legend_left"
+                android:layout_gravity="center_vertical">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="W"
-            android:id="@+id/vt_w"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#ffffffff" />
+                <include
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/listitem_map_legend"
+                    android:id="@+id/legend_0" />
 
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#444444"
-            android:visibility="visible"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" />
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_1" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="CL"
-            android:id="@+id/vt_cl"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#ffff00" />
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_2" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="WS"
-            android:id="@+id/vt_ws"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#ff00ff" />
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_3" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="LC"
-            android:id="@+id/vt_lc"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#0000ff" />
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_4" />
+            </LinearLayout>
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="WF"
-            android:id="@+id/vt_wf"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#00ff00" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/legend_right"
+                android:layout_gravity="center_vertical">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="CO"
-            android:id="@+id/vt_co"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#ff0000" />
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_5" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="SL"
-            android:id="@+id/vt_sl"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#000000"
-            android:textColor="#ffffffff" />
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_6" />
 
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_7" />
+
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_8" />
+
+                <include
+                    layout="@layout/listitem_map_legend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/legend_9" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/legend_toggle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_fab_layers"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+
+<!--
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/map_fabmenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        fab:fab_addButtonColorNormal="@color/fab_white"
+        fab:fab_addButtonColorPressed="@color/fab_white_pressed"
+        fab:fab_addButtonPlusIconColor="@color/fab_half_black"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_type_floor"
+            fab:fab_title="@string/map_type_floor"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_f" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_type_carpet"
+            fab:fab_title="@string/map_type_carpet"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_c" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_type_wall"
+            fab:fab_title="@string/map_type_wall"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_w" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_flag_climb"
+            fab:fab_title="@string/map_flag_climb"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_cl" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_flag_wallsneak"
+            fab:fab_title="@string/map_flag_wallsneak"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_ws" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_flag_abyss"
+            fab:fab_title="@string/map_flag_abyss"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_lc" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_flag_wallfollow"
+            fab:fab_title="@string/map_flag_wallfollow"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_wf" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_flag_collidable"
+            fab:fab_title="@string/map_flag_collidable"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_co" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/map_flag_slow"
+            fab:fab_title="@string/map_flag_slow"
+            fab:fab_colorPressed="@color/fab_white_pressed"
+            fab:fab_size="mini"
+            android:id="@+id/vt_sl" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+-->
+</RelativeLayout>

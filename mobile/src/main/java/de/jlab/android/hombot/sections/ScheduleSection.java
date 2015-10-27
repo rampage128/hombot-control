@@ -66,13 +66,6 @@ public class ScheduleSection extends SectionFragment implements ScheduleItem.Day
             }
         });
 
-        return view;
-    }
-
-    @Override
-    public void onAttach(final Context context) {
-        super.onAttach(context);
-
         FragmentManager fragmentManager = getChildFragmentManager();
         if (fragmentManager.findFragmentByTag("schedule_item") == null) {
             for (HombotSchedule.Weekday day : HombotSchedule.Weekday.values()) {
@@ -85,10 +78,27 @@ public class ScheduleSection extends SectionFragment implements ScheduleItem.Day
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    readSchedule((MainActivity)context);
+                    readSchedule((MainActivity)getContext()); // (MainActivity)context
                 }
             }, 500);
         }
+
+        return view;
+    }
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+    }
+
+    public void onDetach() {
+        super.onDetach();
+/* NO WORK ... ILLEGAL STATE ... FIXME
+        for (ScheduleItem item : mScheduleItemMap.values()) {
+            getChildFragmentManager().beginTransaction().remove(item).commit();
+        }
+        mScheduleItemMap.clear();
+*/
     }
 
     @Override

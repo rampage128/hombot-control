@@ -24,6 +24,7 @@ import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.common.core.HombotMap;
 import de.jlab.android.hombot.sections.map.MapView;
+import de.jlab.android.hombot.utils.ColorableArrayAdapter;
 
 /**
  * A {@link SectionFragment} subclass.
@@ -89,64 +90,6 @@ public class MapSection extends SectionFragment {
             }
         });
 
-
-/*
-        ((FloatingActionButton)view.findViewById(R.id.vt_f)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.FLOOR);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_c)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.CARPET);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_w)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.WALL);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_cl)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.CLIMBABLE);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_ws)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.WALL_SNEAK);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_lc)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.LOW_CEILING);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_wf)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.WALL_FOLLOWING);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_co)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.COLLISION);
-            }
-        });
-        ((FloatingActionButton)view.findViewById(R.id.vt_sl)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewHolder.map.toggleLayer(MapView.LayerType.SLOW);
-            }
-        });
-        */
-
         View.OnClickListener legendToggleListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,6 +125,15 @@ public class MapSection extends SectionFragment {
         }, 500);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getColorizer().colorizeDrawable(mViewHolder.mapSelect.getBackground(), getColorizer().getColorText());
+        getColorizer().colorizeDrawable(mViewHolder.legendFab.getBackground(), getColorizer().getColorPrimary());
+        getColorizer().colorizeDrawable(mViewHolder.legendFab.getDrawable(), getColorizer().getContrastingTextColor(getColorizer().getColorPrimary()));
     }
 
     private void initLegendItem(int id, final int color, int caption, final MapView.LayerType layerType, View container) {
@@ -223,7 +175,7 @@ public class MapSection extends SectionFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
 
-                        mViewHolder.mapSelect.setAdapter(new ArrayAdapter<MapName>(getContext(), android.R.layout.simple_spinner_dropdown_item, mapNameList));
+                        mViewHolder.mapSelect.setAdapter(new ColorableArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, mapNameList.toArray(), getColorizer(), getColorizer().getColorBackground()));
                     }
                 });
             }

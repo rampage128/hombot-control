@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -12,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +37,8 @@ import de.jlab.android.hombot.sections.JoySection;
 import de.jlab.android.hombot.sections.MapSection;
 import de.jlab.android.hombot.sections.ScheduleSection;
 import de.jlab.android.hombot.sections.StatusSection;
+import de.jlab.android.hombot.utils.ColorableCursorAdapter;
+import de.jlab.android.hombot.utils.Colorizer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SectionFragment.SectionInteractionListener, HttpRequestEngine.RequestListener {
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity
 
     private static class ViewHolder {
         View botPanel;
+        TextView botLabel;
         TextView botName;
         TextView botVersion;
         Spinner botSelect;
@@ -51,14 +55,13 @@ public class MainActivity extends AppCompatActivity
     }
     private ViewHolder mViewHolder;
 
-    HttpRequestEngine mRequestEngine;
+    private Colorizer mColorizer;
+
+    private HttpRequestEngine mRequestEngine;
 
     @Override
     public void onWindowFocusChanged(boolean focused) {
         if (focused) {
-            //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            //String botAddress = sp.getString(PREF_BOT_IP, null);
-            //mRequestEngine.setBotAddress(botAddress);
             mRequestEngine.start(this);
         } else {
             mRequestEngine.stop();
@@ -72,17 +75,19 @@ public class MainActivity extends AppCompatActivity
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
         mRequestEngine = new HttpRequestEngine();
+        mColorizer = new Colorizer(this);
 
         setContentView(R.layout.activity_main);
 
         mViewHolder = new ViewHolder();
         mViewHolder.botPanel    = findViewById(R.id.bot_panel);
+        mViewHolder.botLabel     = (TextView)findViewById(R.id.bot_label);
         mViewHolder.botSelect  = (Spinner)findViewById(R.id.bot_select);
         mViewHolder.botName     = (TextView)findViewById(R.id.bot_name);
         mViewHolder.botVersion  = (TextView)findViewById(R.id.bot_version);
+        mViewHolder.windowToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mViewHolder.windowToolbar);
 
         /* TODO IMPLEMENT EVENTS FOR CONTEXT SENSITIVE EXPANDABLE FAB WITH MAIN ACTIONS (CLEAN_START, HOME, CLEAN_SPOT ...)
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, mViewHolder.windowToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -110,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         Cursor botCursor = db.query(HombotDataContract.BotEntry.TABLE_NAME, new String[]{HombotDataContract.BotEntry._ID, HombotDataContract.BotEntry.COLUMN_NAME_NAME, HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS}, null, new String[0], null, null, HombotDataContract.BotEntry.COLUMN_NAME_NAME);
         String[] adapterCols=new String[]{ HombotDataContract.BotEntry.COLUMN_NAME_NAME };
         int[] adapterRowViews=new int[]{ android.R.id.text1 };
-        SimpleCursorAdapter sca = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, botCursor, adapterCols, adapterRowViews, 0);
+        ColorableCursorAdapter sca = new ColorableCursorAdapter(this, android.R.layout.simple_spinner_item, botCursor, adapterCols, adapterRowViews, 0, mColorizer, mColorizer.getColorPrimary());
         sca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mViewHolder.botSelect.setAdapter(sca);
 
@@ -148,6 +153,23 @@ public class MainActivity extends AppCompatActivity
             switchSection(lastSection, false);
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mColorizer.colorizeToolbar(mViewHolder.windowToolbar, this);
+        mViewHolder.botPanel.getBackground().setColorFilter(mColorizer.getColorPrimary(), PorterDuff.Mode.DST_ATOP);
+
+        int desiredTextColor = mColorizer.getContrastingTextColor(mColorizer.getColorPrimary());
+        mViewHolder.botLabel.setTextColor(desiredTextColor);
+        mViewHolder.botName.setTextColor(desiredTextColor);
+        mViewHolder.botVersion.setTextColor(desiredTextColor);
+        mViewHolder.botSelect.getBackground().setColorFilter(desiredTextColor, PorterDuff.Mode.SRC_ATOP);
+        mViewHolder.botSelect.getPopupBackground().setColorFilter(mColorizer.getContrastingTextColor(desiredTextColor), PorterDuff.Mode.SRC);
+        // NOTE THAT SPINNER TEXT IS COLORIZED THROUGH ColorableCursorAdapter!
+        // TODO colorize selected MenuItems
     }
 
     @Override
@@ -235,6 +257,7 @@ public class MainActivity extends AppCompatActivity
      /// SECTION INTERACTION ///
     ///////////////////////////
 
+    @Deprecated
     @Override
     public void onSectionAttached(int section) {
         // DEPRECATED

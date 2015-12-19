@@ -139,6 +139,8 @@ public final class Colorizer {
         return this.mTextColorInverse;
     }
 
+    public int getColorBackground() { return this.mBgColor; }
+
     public void colorize(Fragment fragment, boolean inverse) {
         colorize(fragment.getView(), true, inverse);
     }

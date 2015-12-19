@@ -1,6 +1,7 @@
 package de.jlab.android.hombot.sections;
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.SectionFragment;
@@ -19,6 +21,7 @@ import de.jlab.android.hombot.SettingsActivity;
 import de.jlab.android.hombot.common.settings.SharedSettings;
 import de.jlab.android.hombot.core.HttpRequestEngine;
 import de.jlab.android.hombot.common.utils.JoyTouchListener;
+import de.jlab.android.hombot.utils.Colorizer;
 
 /**
  * A {@link SectionFragment} subclass.
@@ -36,6 +39,7 @@ public class JoySection extends SectionFragment {
         Button commandTurbo;
         Button commandHome;
         View joy;
+        TextView joyLabel;
     }
 
     private ViewHolder mViewHolder;
@@ -87,6 +91,7 @@ public class JoySection extends SectionFragment {
         mViewHolder.commandTurbo = (Button) view.findViewById(R.id.cm_turbo);
         mViewHolder.commandHome = (Button) view.findViewById(R.id.cm_home);
         mViewHolder.joy = view.findViewById(R.id.ct_joy);
+        mViewHolder.joyLabel = (TextView)view.findViewById(R.id.ct_joy_label);
 
 
         mViewHolder.commandMySpace.setOnClickListener(new View.OnClickListener() {
@@ -202,11 +207,15 @@ public class JoySection extends SectionFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getColorizer().tintBackground(mViewHolder.joy, getColorizer().getColorText());
-        getColorizer().colorize(mViewHolder.commandHome, false, false);
-        getColorizer().colorize(mViewHolder.commandSpiral, false, false);
-        getColorizer().colorize(mViewHolder.commandMySpace, false, false);
-        getColorizer().colorize(mViewHolder.commandTurbo, false, false);
+        Colorizer colorizer = getColorizer();
+        int textColor = colorizer.getColorText();
+
+        colorizer.colorizeButton(mViewHolder.commandHome, textColor);
+        colorizer.colorizeButton(mViewHolder.commandSpiral, textColor);
+        colorizer.colorizeButton(mViewHolder.commandMySpace, textColor);
+        colorizer.colorizeButton(mViewHolder.commandTurbo, textColor);
+        mViewHolder.joy.getBackground().setColorFilter(textColor, PorterDuff.Mode.SRC_ATOP);
+        mViewHolder.joyLabel.setTextColor(textColor);
     }
 
 }

@@ -82,8 +82,13 @@ public final class Colorizer {
         }
     }
 
-    public void colorizeIcon(ImageView icon, int color) {
-        icon.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+    public void colorizeDrawable(Drawable drawable, int color) {
+        drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+    }
+
+    public void colorizeButton(Button button, int color) {
+        button.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        button.setTextColor(color);
     }
 
     @Deprecated

@@ -82,6 +82,10 @@ public final class Colorizer {
         }
     }
 
+    public void colorizeIcon(ImageView icon, int color) {
+        icon.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+    }
+
     @Deprecated
     public void colorize(View view, boolean recursive, boolean inverse) {
 

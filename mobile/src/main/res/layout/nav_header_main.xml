@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:id="@+id/textView3"
+        android:id="@+id/bot_label"
         android:text="@string/bot_select"
         android:paddingTop="32dp" />
 

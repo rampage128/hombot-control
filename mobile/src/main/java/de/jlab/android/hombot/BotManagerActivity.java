@@ -3,6 +3,7 @@ package de.jlab.android.hombot;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,29 +15,42 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import de.jlab.android.hombot.data.BotCursorAdapter;
 import de.jlab.android.hombot.data.EditBotDialog;
 import de.jlab.android.hombot.common.data.HombotDataContract;
 import de.jlab.android.hombot.common.data.HombotDataOpenHelper;
+import de.jlab.android.hombot.utils.Colorizer;
 
 public class BotManagerActivity extends AppCompatActivity implements EditBotDialog.BotEditDialogListener {
 
     private BotCursorAdapter mBotAdapter;
 
+    private static class ViewHolder {
+        Toolbar windowToolbar;
+        FloatingActionButton fab;
+    }
+    private ViewHolder mViewHolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot_manager);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        mViewHolder = new ViewHolder();
+        mViewHolder.windowToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mViewHolder.fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        setSupportActionBar(mViewHolder.windowToolbar);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        mViewHolder.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*
@@ -83,6 +97,19 @@ public class BotManagerActivity extends AppCompatActivity implements EditBotDial
         });
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Colorizer colorizer = new Colorizer(this);
+
+        getWindow().getDecorView().setBackgroundColor(colorizer.getColorBackground());
+        colorizer.colorizeToolbar(mViewHolder.windowToolbar, this);
+
+        colorizer.colorizeDrawable(mViewHolder.fab.getBackground(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.fab.getDrawable(), colorizer.getContrastingTextColor(colorizer.getColorPrimary()));
     }
 
     private void deleteBot(long id) {

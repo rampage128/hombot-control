@@ -87,6 +87,14 @@ public class ScheduleSection extends SectionFragment implements ScheduleItem.Day
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getColorizer().colorizeDrawable(mViewHolder.saveButton.getBackground(), getColorizer().getColorPrimary());
+        mViewHolder.saveButton.setTextColor(getColorizer().getContrastingTextColor(getColorizer().getColorPrimary()));
+    }
+
+    @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
     }

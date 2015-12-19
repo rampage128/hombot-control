@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -29,6 +30,8 @@ import java.util.Locale;
 
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.common.core.HombotSchedule;
+import de.jlab.android.hombot.utils.ColorableArrayAdapter;
+import de.jlab.android.hombot.utils.Colorizer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,9 +56,12 @@ public class ScheduleItem extends Fragment {
         Spinner modeSpinner;
         EditText timeEdit;
         CheckBox check;
+        TextView label;
     }
 
     private ViewHolder mViewHolder;
+
+    private Colorizer mColorizer;
 
     /**
      * Use this factory method to create a new instance of
@@ -126,10 +132,13 @@ public class ScheduleItem extends Fragment {
         TextView header = (TextView) view.findViewById(R.id.header_label);
         header.setText(getResources().getTextArray(R.array.weekdays)[mDay.ordinal()]);
 
+        mColorizer = new Colorizer(getActivity());
+
         mViewHolder = new ViewHolder();
         mViewHolder.modeSpinner = (Spinner) view.findViewById(R.id.mode_spinner);
         mViewHolder.timeEdit = (EditText) view.findViewById(R.id.time_field);
         mViewHolder.check = (CheckBox) view.findViewById(R.id.time_check);
+        mViewHolder.label = (TextView) view.findViewById(R.id.header_label);
 
         if (savedInstanceState != null) {
             mTime = savedInstanceState.getString("time");
@@ -137,12 +146,18 @@ public class ScheduleItem extends Fragment {
         }
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
-                R.array.schedule_modes, android.R.layout.simple_spinner_item);
+        ColorableArrayAdapter<CharSequence> adapter = ColorableArrayAdapter.createFromResource(this.getActivity(),
+                R.array.schedule_modes, android.R.layout.simple_spinner_item, mColorizer, mColorizer.getColorBackground());
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         mViewHolder.modeSpinner.setAdapter(adapter);
+
+        mColorizer.colorizeDrawable(mViewHolder.modeSpinner.getBackground(), mColorizer.getColorText());
+        mColorizer.colorizeDrawable(mViewHolder.timeEdit.getBackground(), mColorizer.getColorText());
+        mViewHolder.timeEdit.setTextColor(mColorizer.getColorText());
+        mViewHolder.label.setTextColor(mColorizer.getColorText());
+        // TODO colorize checkboxes
 
         /*
         if (null != mMode) {

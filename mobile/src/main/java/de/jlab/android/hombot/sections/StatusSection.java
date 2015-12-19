@@ -14,6 +14,7 @@ import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.common.core.HombotStatus;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.core.HttpRequestEngine;
+import de.jlab.android.hombot.utils.Colorizer;
 
 /**
  * A {@link SectionFragment} subclass.
@@ -137,13 +138,25 @@ public class StatusSection extends SectionFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewHolder.displayStatusText.setTextColor(getColorizer().getColorPrimary());
-        mViewHolder.displayBatteryText.setTextColor(getColorizer().getColorPrimary());
-        getColorizer().colorize(mViewHolder.commandHome, false, false);
-        getColorizer().colorize(mViewHolder.commandMode, false, false);
-        getColorizer().colorize(mViewHolder.commandRepeat, false, false);
-        getColorizer().colorize(mViewHolder.commandTurbo, false, false);
-        getColorizer().colorize(mViewHolder.commandStartStop, false, false);
+        Colorizer colorizer = getColorizer();
+
+        mViewHolder.displayStatusText.setTextColor(colorizer.getColorPrimary());
+        mViewHolder.displayBatteryText.setTextColor(colorizer.getColorPrimary());
+
+        colorizer.colorizeDrawable(mViewHolder.displayModeCellByCell.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayModeHome.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayModeMySpace.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayModeRepeat.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayModeSpiral.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayModeZigZag.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayTurboLeft.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayTurboRight.getDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeDrawable(mViewHolder.displayBatteryProgress.getProgressDrawable(), colorizer.getColorPrimary());
+        colorizer.colorizeButton(mViewHolder.commandHome, colorizer.getColorText());
+        colorizer.colorizeButton(mViewHolder.commandMode, colorizer.getColorText());
+        colorizer.colorizeButton(mViewHolder.commandRepeat, colorizer.getColorText());
+        colorizer.colorizeButton(mViewHolder.commandTurbo, colorizer.getColorText());
+        colorizer.colorizeButton(mViewHolder.commandStartStop, colorizer.getColorText());
     }
 
     @Override

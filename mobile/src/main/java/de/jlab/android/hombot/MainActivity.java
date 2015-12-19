@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -42,8 +41,6 @@ import de.jlab.android.hombot.utils.Colorizer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SectionFragment.SectionInteractionListener, HttpRequestEngine.RequestListener {
-
-    public static final String PREF_BOT_IP = "bot_ip";
 
     private static class ViewHolder {
         View botPanel;
@@ -112,6 +109,7 @@ public class MainActivity extends AppCompatActivity
         // FETCH BOTS
         HombotDataOpenHelper dataHelper = new HombotDataOpenHelper(this);
         final SQLiteDatabase db = dataHelper.getReadableDatabase();
+        // TODO switch to CursorLoader eventually
         Cursor botCursor = db.query(HombotDataContract.BotEntry.TABLE_NAME, new String[]{HombotDataContract.BotEntry._ID, HombotDataContract.BotEntry.COLUMN_NAME_NAME, HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS}, null, new String[0], null, null, HombotDataContract.BotEntry.COLUMN_NAME_NAME);
         String[] adapterCols=new String[]{ HombotDataContract.BotEntry.COLUMN_NAME_NAME };
         int[] adapterRowViews=new int[]{ android.R.id.text1 };

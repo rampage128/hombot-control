@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
+        getWindow().getDecorView().setBackgroundColor(mColorizer.getColorBackground());
         mColorizer.colorizeToolbar(mViewHolder.windowToolbar, this);
         mViewHolder.botPanel.getBackground().setColorFilter(mColorizer.getColorPrimary(), PorterDuff.Mode.DST_ATOP);
 

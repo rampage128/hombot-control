@@ -6,13 +6,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -61,11 +61,15 @@ public final class Colorizer {
         window.getDecorView().setBackgroundColor(mBgColor);
 
 
-        colorizeToolbar((Toolbar) activity.findViewById(R.id.toolbar));
+        colorizeToolbar((Toolbar) activity.findViewById(R.id.toolbar), activity);
     }
 
-    public void colorizeToolbar(Toolbar toolbar) {
+    public void colorizeToolbar(Toolbar toolbar, Activity activity) {
         toolbar.setBackgroundColor(mColorPrimary);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().setStatusBarColor(mColorPrimaryDark);
+        }
 
         for (int i = 0; i < toolbar.getChildCount(); i++) {
             View toolbarItem = toolbar.getChildAt(i);
@@ -78,6 +82,7 @@ public final class Colorizer {
         }
     }
 
+    @Deprecated
     public void colorize(View view, boolean recursive, boolean inverse) {
 
         int textColor = mTextColor;
@@ -162,7 +167,7 @@ public final class Colorizer {
      * @param color Color to get contrasting color for
      * @return {@Link Color.White} if color is darker than 0.5 or {@Link Color.Black}
      */
-    private int getContrastingTextColor(int color) {
+    public int getContrastingTextColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         return hsv[2] < 0.9f ? Color.WHITE : Color.BLACK;

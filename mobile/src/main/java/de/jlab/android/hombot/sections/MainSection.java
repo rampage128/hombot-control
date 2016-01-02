@@ -1,6 +1,7 @@
 package de.jlab.android.hombot.sections;
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -196,22 +197,25 @@ public class MainSection extends SectionFragment {
                 public void onGlobalLayout() {
                     int finalSize = Math.min(mViewHolder.joy.getMeasuredWidth(), mViewHolder.joy.getMeasuredHeight());
                     mViewHolder.joy.setLayoutParams(new RelativeLayout.LayoutParams(finalSize, finalSize));
-                    getView().invalidate();
+                    if (getView() != null) {
+                        getView().invalidate();
+                    }
                 }
             });
         }
 
         Colorizer colorizer = getColorizer();
+        int textColor = colorizer.getColorText();
 
         mViewHolder.statusDisplay.colorize(colorizer);
+        mViewHolder.joy.getBackground().setColorFilter(textColor, PorterDuff.Mode.SRC_ATOP);
+        mViewHolder.joyLabel.setTextColor(textColor);
 
-        /*
-        colorizer.colorizeButton(mViewHolder.commandHome, colorizer.getColorText());
-        colorizer.colorizeButton(mViewHolder.commandMode, colorizer.getColorText());
-        colorizer.colorizeButton(mViewHolder.commandRepeat, colorizer.getColorText());
-        colorizer.colorizeButton(mViewHolder.commandTurbo, colorizer.getColorText());
-        colorizer.colorizeButton(mViewHolder.commandStartStop, colorizer.getColorText());
-        */
+        colorizer.colorizeButton(mViewHolder.commandHome, textColor);
+        colorizer.colorizeButton(mViewHolder.commandMode, textColor);
+        colorizer.colorizeButton(mViewHolder.commandRepeat, textColor);
+        colorizer.colorizeButton(mViewHolder.commandTurbo, textColor);
+        colorizer.colorizeButton(mViewHolder.commandStartStop, textColor);
     }
 
     @Override

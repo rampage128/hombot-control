@@ -1,38 +1,31 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:key="remember_section"
-        android:title="@string/pref_title_remembersection"
         android:summaryOff="@string/pref_desc_remembersection_off"
         android:summaryOn="@string/pref_desc_remembersection_on"
-        />
+        android:title="@string/pref_title_remembersection" />
+
+    <CheckBoxPreference
+        android:key="combine_remote"
+        android:summaryOff="@string/pref_desc_combine_remote_off"
+        android:summaryOn="@string/pref_desc_combine_remote_on"
+        android:title="@string/pref_title_combine_remote" />
+
     <PreferenceCategory
         android:key="pref_category_colors"
         android:title="@string/pref_category_colors">
 
-                <ListPreference
-                    android:key="color_theme"
-                    android:title="@string/pref_title_color_theme"
-                    android:entries="@array/pref_color_theme_titles"
-                    android:entryValues="@array/pref_color_theme_values"
-                    android:defaultValue="@string/pref_default_color_theme" />
-                />
-        <!--
+        <ListPreference
+            android:defaultValue="@string/pref_default_color_theme"
+            android:entries="@array/pref_color_theme_titles"
+            android:entryValues="@array/pref_color_theme_values"
+            android:key="color_theme"
+            android:title="@string/pref_title_color_theme" />
 
-                        <de.jlab.android.hombot.utils.ColorPreference
-                            android:defaultValue="#444444"
-                            android:key="color_bg"
-                            android:title="@string/pref_title_general_bgcolor" />
-
-                        <de.jlab.android.hombot.utils.ColorPreference
-                            android:defaultValue="#ffffff"
-                            android:key="color_fg"
-                            android:title="@string/pref_title_general_foregroundcolor" />
-                -->
-                        <de.jlab.android.hombot.utils.ColorPreference
-                            android:defaultValue="@string/pref_default_color_primary"
-                            android:key="color_primary"
-                            android:title="@string/pref_title_color_primary"
-                            android:summary="@string/pref_desc_color_primary" />
-
+        <de.jlab.android.hombot.utils.ColorPreference
+            android:defaultValue="@string/pref_default_color_primary"
+            android:key="color_primary"
+            android:summary="@string/pref_desc_color_primary"
+            android:title="@string/pref_title_color_primary" />
     </PreferenceCategory>
 </PreferenceScreen>

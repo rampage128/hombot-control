@@ -10,7 +10,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="0.4"
+        android:layout_marginBottom="16dp">
 
         <fragment
             android:layout_width="match_parent"
@@ -25,76 +26,95 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:id="@+id/ct_controls"
-        android:layout_weight="1">
+        android:layout_weight="0.6">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="center_vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="32dp">
+                android:layout_weight="0.3">
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
                     android:text="@string/command_turbo"
                     android:id="@+id/cm_turbo"
                     style="@style/control_button"
                     android:layout_weight="1"
-                    android:layout_marginRight="4dp" />
+                    android:layout_marginBottom="4dp" />
 
                 <Button
                     style="@style/control_button"
-                    android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
                     android:text="@string/command_mode"
                     android:id="@+id/cm_mode"
                     android:layout_weight="1"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginLeft="4dp" />
+                    android:layout_marginBottom="4dp" />
 
                 <Button
                     style="@style/control_button"
-                    android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
                     android:text="@string/command_repeat"
                     android:id="@+id/cm_repeat"
                     android:layout_weight="1"
-                    android:layout_marginLeft="4dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+                    android:layout_marginBottom="4dp" />
 
                 <Button
                     style="@style/control_button"
-                    android:layout_width="96dp"
-                    android:layout_height="64dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
                     android:text="@string/command_home"
                     android:id="@+id/cm_home"
                     android:layout_weight="1"
-                    android:layout_marginRight="4dp" />
+                    android:layout_marginBottom="4dp" />
 
                 <Button
                     style="@style/control_button"
-                    android:layout_width="96dp"
-                    android:layout_height="64dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
                     android:text="@string/command_start"
                     android:id="@+id/cm_startstop"
-                    android:layout_gravity="center_horizontal"
                     android:minWidth="88dp"
-                    android:layout_marginLeft="4dp" />
+                    android:layout_weight="1" />
+
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp">
+
+                <FrameLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/joy_bg"
+                    android:id="@+id/ct_joy"
+                    android:focusableInTouchMode="false"
+                    android:layout_gravity="center"
+                    android:layout_centerInParent="true" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/joycenter"
+                        android:id="@+id/ct_joy_label"
+                        android:layout_gravity="center"
+                        android:gravity="center" />
+                </FrameLayout>
+            </RelativeLayout>
 
         </LinearLayout>
     </FrameLayout>

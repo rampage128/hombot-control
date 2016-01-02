@@ -149,12 +149,12 @@ public class StatusFragment extends Fragment {
                 mViewHolder.modeZigZag.setVisibility(View.VISIBLE);
                 mViewHolder.modeCellByCell.setVisibility(View.INVISIBLE);
                 mViewHolder.modeSpiral.setVisibility(View.INVISIBLE);
-                mViewHolder.modeCellByCell.setVisibility(View.INVISIBLE);
+                mViewHolder.modeMySpace.setVisibility(View.INVISIBLE);
             } else if (HombotStatus.Mode.CELLBYCELL.equals(status.getMode())) {
                 mViewHolder.modeZigZag.setVisibility(View.INVISIBLE);
                 mViewHolder.modeCellByCell.setVisibility(View.VISIBLE);
                 mViewHolder.modeSpiral.setVisibility(View.INVISIBLE);
-                mViewHolder.modeCellByCell.setVisibility(View.INVISIBLE);
+                mViewHolder.modeMySpace.setVisibility(View.INVISIBLE);
             } else if (HombotStatus.Mode.SPIRAL.equals(status.getMode())) {
                 mViewHolder.modeZigZag.setVisibility(View.INVISIBLE);
                 mViewHolder.modeCellByCell.setVisibility(View.INVISIBLE);
@@ -164,7 +164,7 @@ public class StatusFragment extends Fragment {
                 mViewHolder.modeZigZag.setVisibility(View.INVISIBLE);
                 mViewHolder.modeCellByCell.setVisibility(View.INVISIBLE);
                 mViewHolder.modeSpiral.setVisibility(View.INVISIBLE);
-                mViewHolder.modeCellByCell.setVisibility(View.VISIBLE);
+                mViewHolder.modeMySpace.setVisibility(View.VISIBLE);
             }
         }
 

@@ -14,6 +14,7 @@ import de.jlab.android.hombot.SectionFragment;
 import de.jlab.android.hombot.common.core.HombotStatus;
 import de.jlab.android.hombot.R;
 import de.jlab.android.hombot.core.HttpRequestEngine;
+import de.jlab.android.hombot.sections.common.StatusFragment;
 import de.jlab.android.hombot.utils.Colorizer;
 
 /**
@@ -27,18 +28,7 @@ import de.jlab.android.hombot.utils.Colorizer;
 public class StatusSection extends SectionFragment {
 
     static class ViewHolder {
-        View display;
-        TextView displayStatusText;
-        ProgressBar displayBatteryProgress;
-        TextView displayBatteryText;
-        ImageView displayModeHome;
-        ImageView displayModeZigZag;
-        ImageView displayModeCellByCell;
-        ImageView displayModeSpiral;
-        ImageView displayModeMySpace;
-        ImageView displayModeRepeat;
-        ImageView displayTurboLeft;
-        ImageView displayTurboRight;
+        StatusFragment statusDisplay;
 
         Button commandStartStop;
         Button commandTurbo;
@@ -67,20 +57,6 @@ public class StatusSection extends SectionFragment {
         View view = inflater.inflate(R.layout.fragment_section_status, container, false);
 
         mViewHolder = new ViewHolder();
-
-        mViewHolder.display = view.findViewById(R.id.ct_status);
-        mViewHolder.displayStatusText = (TextView) view.findViewById(R.id.lb_status);
-        mViewHolder.displayBatteryProgress = (ProgressBar) view.findViewById(R.id.battery_progress);
-        mViewHolder.displayBatteryText = (TextView) view.findViewById(R.id.battery_text);
-        mViewHolder.displayModeHome = (ImageView) view.findViewById(R.id.ic_mode_home);
-        mViewHolder.displayModeZigZag = (ImageView) view.findViewById(R.id.ic_mode_zigzag);
-        mViewHolder.displayModeCellByCell = (ImageView) view.findViewById(R.id.ic_mode_cell);
-        mViewHolder.displayModeSpiral = (ImageView) view.findViewById(R.id.ic_mode_spiral);
-        mViewHolder.displayModeMySpace = (ImageView) view.findViewById(R.id.ic_mode_myspace);
-        mViewHolder.displayModeRepeat = (ImageView) view.findViewById(R.id.ic_mode_repeat);
-        mViewHolder.displayTurboLeft = (ImageView) view.findViewById(R.id.ic_turbo_left);
-        mViewHolder.displayTurboRight = (ImageView) view.findViewById(R.id.ic_turbo_right);
-
         mViewHolder.commandStartStop = (Button) view.findViewById(R.id.cm_startstop);
         mViewHolder.commandTurbo = (Button) view.findViewById(R.id.cm_turbo);
         mViewHolder.commandMode = (Button) view.findViewById(R.id.cm_mode);
@@ -129,8 +105,6 @@ public class StatusSection extends SectionFragment {
             }
         });
 
-        mViewHolder.display.setVisibility(View.INVISIBLE);
-
         return view;
     }
 
@@ -140,18 +114,11 @@ public class StatusSection extends SectionFragment {
 
         Colorizer colorizer = getColorizer();
 
-        mViewHolder.displayStatusText.setTextColor(colorizer.getColorPrimary());
-        mViewHolder.displayBatteryText.setTextColor(colorizer.getColorPrimary());
+        mViewHolder.statusDisplay = (StatusFragment) getChildFragmentManager().findFragmentById(R.id.ct_status);
 
-        colorizer.colorizeDrawable(mViewHolder.displayModeCellByCell.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayModeHome.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayModeMySpace.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayModeRepeat.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayModeSpiral.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayModeZigZag.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayTurboLeft.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayTurboRight.getDrawable(), colorizer.getColorPrimary());
-        colorizer.colorizeDrawable(mViewHolder.displayBatteryProgress.getProgressDrawable(), colorizer.getColorPrimary());
+        mViewHolder.statusDisplay.getView().setVisibility(View.INVISIBLE);
+
+        mViewHolder.statusDisplay.colorize(colorizer);
         colorizer.colorizeButton(mViewHolder.commandHome, colorizer.getColorText());
         colorizer.colorizeButton(mViewHolder.commandMode, colorizer.getColorText());
         colorizer.colorizeButton(mViewHolder.commandRepeat, colorizer.getColorText());
@@ -170,95 +137,13 @@ public class StatusSection extends SectionFragment {
             return;
         }
 
-        Resources res = getResources();
-        String localized = res.getString(res.getIdentifier("status_" + status.getStatus().name().toLowerCase(), "string", getActivity().getPackageName()));
-        mViewHolder.displayStatusText.setText(localized); // status.getStatus().toString()
-
-        if (HombotStatus.Status.OFFLINE.equals(status.getStatus())) {
-            mViewHolder.displayBatteryProgress.setProgress(0);
-            mViewHolder.displayBatteryText.setText("0%");
-            mViewHolder.displayBatteryProgress.setVisibility(View.VISIBLE);
-            mViewHolder.displayBatteryText.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeHome.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeZigZag.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeCellByCell.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeSpiral.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeMySpace.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeRepeat.setVisibility(View.VISIBLE);
-            mViewHolder.displayTurboLeft.setVisibility(View.VISIBLE);
-            mViewHolder.displayTurboRight.setVisibility(View.VISIBLE);
-            if (mViewHolder.display.getVisibility() == View.VISIBLE) {
-                mViewHolder.display.setVisibility(View.INVISIBLE);
-            } else {
-                mViewHolder.display.setVisibility(View.VISIBLE);
-            }
-            return;
-        } else {
-            mViewHolder.displayBatteryProgress.setVisibility(View.VISIBLE);
-            mViewHolder.displayBatteryText.setVisibility(View.VISIBLE);
-        }
-
-        if (HombotStatus.Status.HOMING.equals(status.getStatus()) || HombotStatus.Status.DOCKING.equals(status.getStatus())) {
-            mViewHolder.displayModeHome.setVisibility(View.VISIBLE);
-        } else {
-            mViewHolder.displayModeHome.setVisibility(View.INVISIBLE);
-        }
-
-        mViewHolder.displayBatteryProgress.setProgress(status.getBatteryPercent());
-        mViewHolder.displayBatteryText.setText(status.getBatteryPercent() + "%");
+        mViewHolder.statusDisplay.statusUpdate(status);
 
         if (this.isWorking) {
             mViewHolder.commandStartStop.setText(getResources().getText(R.string.command_pause));
         } else {
             mViewHolder.commandStartStop.setText(getResources().getText(R.string.command_start));
         }
-
-        if (!status.getTurbo()) {
-            mViewHolder.displayTurboLeft.setVisibility(View.INVISIBLE);
-            mViewHolder.displayTurboRight.setVisibility(View.INVISIBLE);
-        } else {
-            mViewHolder.displayTurboLeft.setVisibility(View.VISIBLE);
-            mViewHolder.displayTurboRight.setVisibility(View.VISIBLE);
-        }
-
-        if (!status.getRepeat()) {
-            mViewHolder.displayModeRepeat.setVisibility(View.INVISIBLE);
-        } else {
-            mViewHolder.displayModeRepeat.setVisibility(View.VISIBLE);
-        }
-
-        if (HombotStatus.Status.HOMING.equals(status.getStatus()) || HombotStatus.Status.DOCKING.equals(status.getStatus())) {
-            mViewHolder.displayModeHome.setVisibility(View.VISIBLE);
-            mViewHolder.displayModeZigZag.setVisibility(View.INVISIBLE);
-            mViewHolder.displayModeCellByCell.setVisibility(View.INVISIBLE);
-            mViewHolder.displayModeSpiral.setVisibility(View.INVISIBLE);
-            mViewHolder.displayModeMySpace.setVisibility(View.INVISIBLE);
-        } else {
-            mViewHolder.displayModeHome.setVisibility(View.INVISIBLE);
-            if (HombotStatus.Mode.ZIGZAG.equals(status.getMode())) {
-                mViewHolder.displayModeZigZag.setVisibility(View.VISIBLE);
-                mViewHolder.displayModeCellByCell.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeSpiral.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeMySpace.setVisibility(View.INVISIBLE);
-            } else if (HombotStatus.Mode.CELLBYCELL.equals(status.getMode())) {
-                mViewHolder.displayModeZigZag.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeCellByCell.setVisibility(View.VISIBLE);
-                mViewHolder.displayModeSpiral.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeMySpace.setVisibility(View.INVISIBLE);
-            } else if (HombotStatus.Mode.SPIRAL.equals(status.getMode())) {
-                mViewHolder.displayModeZigZag.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeCellByCell.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeSpiral.setVisibility(View.VISIBLE);
-                mViewHolder.displayModeMySpace.setVisibility(View.INVISIBLE);
-            } else if (HombotStatus.Mode.MYSPACE.equals(status.getMode()) || HombotStatus.Mode.MYSPACE_RECORD.equals(status.getMode())) {
-                mViewHolder.displayModeZigZag.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeCellByCell.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeSpiral.setVisibility(View.INVISIBLE);
-                mViewHolder.displayModeMySpace.setVisibility(View.VISIBLE);
-            }
-        }
-
-        mViewHolder.display.setVisibility(View.VISIBLE);
 
     }
 

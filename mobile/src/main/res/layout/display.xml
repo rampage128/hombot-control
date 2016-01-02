@@ -41,7 +41,7 @@
 
             <ProgressBar
                 android:layout_width="72dp"
-                android:layout_height="fill_parent"
+                android:layout_height="64dp"
                 android:id="@+id/battery_progress"
                 android:progress="50"
                 android:indeterminate="false"
@@ -52,8 +52,7 @@
 
         <FrameLayout
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="fill_parent"

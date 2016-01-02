@@ -78,6 +78,8 @@ public class MainSection extends SectionFragment {
         mViewHolder.joy = view.findViewById(R.id.ct_joy);
         mViewHolder.joyLabel = (TextView)view.findViewById(R.id.ct_joy_label);
 
+        mViewHolder.statusDisplay.getView().setVisibility(View.INVISIBLE);
+
         // INIT COMMANDS
         mViewHolder.commandTurbo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

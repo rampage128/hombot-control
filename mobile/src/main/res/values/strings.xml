@@ -83,6 +83,10 @@
     <string name="pref_desc_remembersection_on">Reopen last screen on app start</string>
     <string name="pref_desc_remembersection_off">Show status screen on app start</string>
 
+    <string name="pref_title_combine_remote">Combine Status and Control sections</string>
+    <string name="pref_desc_combine_remote_on">Show only one Section</string>
+    <string name="pref_desc_combine_remote_off">Show Status and Remote sections</string>
+
     <string name="pref_category_colors">Colors</string>
 
     <string name="pref_title_color_theme">Theme</string>

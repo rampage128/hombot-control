@@ -34,7 +34,7 @@ public class MainSection extends SectionFragment {
         View view = inflater.inflate(R.layout.fragment_section_main, container, false);
 
         mViewHolder = new ViewHolder();
-        mViewHolder.statusDisplay = (StatusFragment) getFragmentManager().findFragmentById(R.id.ct_status);
+
 
         return view;
     }
@@ -42,6 +42,8 @@ public class MainSection extends SectionFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mViewHolder.statusDisplay = (StatusFragment) getChildFragmentManager().findFragmentById(R.id.ct_status);
 
         Colorizer colorizer = getColorizer();
 

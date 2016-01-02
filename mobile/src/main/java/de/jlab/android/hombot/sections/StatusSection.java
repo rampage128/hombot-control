@@ -116,8 +116,6 @@ public class StatusSection extends SectionFragment {
 
         mViewHolder.statusDisplay = (StatusFragment) getChildFragmentManager().findFragmentById(R.id.ct_status);
 
-        mViewHolder.statusDisplay.getView().setVisibility(View.INVISIBLE);
-
         mViewHolder.statusDisplay.colorize(colorizer);
         colorizer.colorizeButton(mViewHolder.commandHome, colorizer.getColorText());
         colorizer.colorizeButton(mViewHolder.commandMode, colorizer.getColorText());

@@ -67,6 +67,8 @@ public class StatusFragment extends Fragment {
         mViewHolder.turboLeft = (ImageView) view.findViewById(R.id.ic_turbo_left);
         mViewHolder.turboRight = (ImageView) view.findViewById(R.id.ic_turbo_right);
 
+        mViewHolder.display.setVisibility(View.INVISIBLE);
+
         return view;
     }
 

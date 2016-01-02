@@ -33,6 +33,7 @@ import de.jlab.android.hombot.core.HttpRequestEngine;
 import de.jlab.android.hombot.common.data.HombotDataContract;
 import de.jlab.android.hombot.common.data.HombotDataOpenHelper;
 import de.jlab.android.hombot.sections.JoySection;
+import de.jlab.android.hombot.sections.MainSection;
 import de.jlab.android.hombot.sections.MapSection;
 import de.jlab.android.hombot.sections.ScheduleSection;
 import de.jlab.android.hombot.sections.StatusSection;
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity
     private Colorizer mColorizer;
 
     private HttpRequestEngine mRequestEngine;
+
+    private boolean mCombineRemote = false;
 
     @Override
     public void onWindowFocusChanged(boolean focused) {
@@ -106,6 +109,11 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mCombineRemote = sp.getBoolean(SettingsActivity.PREF_COMBINE_REMOTE, false);
+        if (mCombineRemote) {
+            navigationView.getMenu().removeItem(R.id.nav_status);
+        }
+
         // FETCH BOTS
         HombotDataOpenHelper dataHelper = new HombotDataOpenHelper(this);
         final SQLiteDatabase db = dataHelper.getReadableDatabase();
@@ -142,9 +150,15 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (getCurrentSection() == null) {
-            int lastSection = R.id.nav_status;
+
+            int defaultSection = R.id.nav_status;
+            if (mCombineRemote) {
+                defaultSection = R.id.nav_joy;
+            }
+
+            int lastSection = defaultSection;
             if (sp.getBoolean(SettingsActivity.PREF_REMEMBER_SECTION, false)) {
-                lastSection = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, R.id.nav_status);
+                lastSection = sp.getInt(SettingsActivity.PREF_RECENT_SECTION, defaultSection);
             }
             //navigationView.getMenu().performIdentifierAction(lastSection, 0);
             navigationView.getMenu().findItem(lastSection).setChecked(true);
@@ -225,7 +239,11 @@ public class MainActivity extends AppCompatActivity
 
     private void switchSection(int sectionId, boolean track) {
         if (sectionId == R.id.nav_joy) {
-            switchSection(JoySection.newInstance(R.id.nav_joy), track);
+            if (mCombineRemote) {
+                switchSection(MainSection.newInstance(R.id.nav_joy), track);
+            } else {
+                switchSection(JoySection.newInstance(R.id.nav_joy), track);
+            }
         } else if (sectionId == R.id.nav_schedule) {
             switchSection(ScheduleSection.newInstance(R.id.nav_schedule), track);
         } else if (sectionId == R.id.nav_map) {

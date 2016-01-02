@@ -12,11 +12,13 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <include layout="@layout/display"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+        <fragment
             android:layout_width="match_parent"
-            android:layout_gravity="center" />
+            android:layout_height="wrap_content"
+            android:name="de.jlab.android.hombot.sections.common.StatusFragment"
+            android:id="@+id/ct_status"
+            android:layout_gravity="center"
+            tools:layout="@layout/display" />
     </FrameLayout>
 
     <FrameLayout

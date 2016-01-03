@@ -13,13 +13,15 @@
     <color name="map_background">#90A4AE</color>
 
     <color name="map_blocks">#80212121</color>
-    <color name="map_type_wall">#CFD8DC</color>
-    <color name="map_type_carpet">#795548</color>
-    <color name="map_type_floor">#ECEFF1</color>
-    <color name="map_flag_climb">#ccCDDC39</color>
-    <color name="map_flag_wallsneak">#80009688</color>
-    <color name="map_flag_abyss">#ccF44336</color>
-    <color name="map_flag_wallfollow">#8003A9F4</color>
-    <color name="map_flag_collidable">#80795548</color>
-    <color name="map_flag_slow">#80607D8B</color>
+    <color name="map_type_wall">#5f5f5f</color>
+    <color name="map_type_floor">#a88957</color>
+
+    <color name="map_flag_bump">#ccca0064</color>
+    <color name="map_flag_bump_abyss">#cc765e6b</color>
+    <color name="map_flag_abyss">#cc0000DF</color>
+    <color name="map_flag_sneak">#88be9b62</color>
+    <color name="map_flag_screw">#cc856c44</color>
+    <color name="map_flag_move_object">#cce18e0e</color>
+    <color name="map_flag_fight">#ccF44336</color>
+    <color name="map_flag_undetermined">#ccffffff</color>
 </resources>

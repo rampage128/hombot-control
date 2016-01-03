@@ -28,7 +28,7 @@ public class MapViewLayer {
     }
 
     public void draw(Canvas c, Paint p, float zoom) {
-        if (!mEnabled) {
+        if (!mEnabled || mDrawables == null) {
             return;
         }
 

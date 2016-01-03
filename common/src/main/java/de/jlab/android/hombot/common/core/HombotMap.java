@@ -1,8 +1,5 @@
 package de.jlab.android.hombot.common.core;
 
-import android.graphics.Point;
-
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -169,12 +166,12 @@ public class HombotMap {
             NORMAL
         }
 
-        private boolean climbable;
-        private boolean wallSneak;
-        private boolean lowCeiling;
-        private boolean followWall;
         private boolean collision;
-        private boolean slow;
+        private boolean infrared;
+        private boolean abyss;
+        private boolean ultrasonic;
+        private boolean sneaking;
+        private boolean screwing;
         private FloorType floorType;
 
         private Cell() {
@@ -190,12 +187,12 @@ public class HombotMap {
 
             byte b = in.get();
 
-            cell.climbable = (b & ((byte) 1 << 7)) != 0;
-            cell.wallSneak = (b & ((byte) 1 << 6)) != 0;
-            cell.lowCeiling = (b & ((byte) 1 << 5)) != 0;
-            cell.followWall = (b & ((byte) 1 << 4)) != 0;
-            cell.collision = (b & ((byte) 1 << 3)) != 0;
-            cell.slow = (b & ((byte) 1 << 2)) != 0;
+            cell.collision = (b & ((byte) 1 << 7)) != 0;
+            cell.infrared = (b & ((byte) 1 << 6)) != 0;
+            cell.abyss = (b & ((byte) 1 << 5)) != 0;
+            cell.ultrasonic = (b & ((byte) 1 << 4)) != 0;
+            cell.sneaking = (b & ((byte) 1 << 3)) != 0;
+            cell.screwing = (b & ((byte) 1 << 2)) != 0;
 
             int val = ((b & ((byte) 1 << 1)) != 0 ? 2 : 0) + ((b & ((byte) 1 << 0)) != 0 ? 1 : 0);
             cell.floorType = FloorType.values()[val];
@@ -204,28 +201,28 @@ public class HombotMap {
 
         }
 
-        public boolean isClimbable() {
-            return climbable;
-        }
-
-        public boolean isWallSneak() {
-            return this.wallSneak;
-        }
-
-        public boolean isLowCeiling() {
-            return this.lowCeiling;
-        }
-
-        public boolean isWallFollowing() {
-            return this.followWall;
-        }
-
         public boolean isCollision() {
-            return this.collision;
+            return collision;
         }
 
-        public boolean isSlow() {
-            return this.slow;
+        public boolean isInfrared() {
+            return this.infrared;
+        }
+
+        public boolean isAbyss() {
+            return this.abyss;
+        }
+
+        public boolean isUltraSonic() {
+            return this.ultrasonic;
+        }
+
+        public boolean isSneaking() {
+            return this.sneaking;
+        }
+
+        public boolean isScrewing() {
+            return this.screwing;
         }
 
     }

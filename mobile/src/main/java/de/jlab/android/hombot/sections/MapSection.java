@@ -106,15 +106,18 @@ public class MapSection extends SectionFragment {
         mViewHolder.legend.setVisibility(View.GONE);
 
         initLegendItem(R.id.legend_0, R.color.map_type_floor, R.string.map_type_floor, MapView.LayerType.FLOOR, mViewHolder.legend);
-        initLegendItem(R.id.legend_1, R.color.map_type_carpet, R.string.map_type_carpet, MapView.LayerType.CARPET, mViewHolder.legend);
-        initLegendItem(R.id.legend_2, R.color.map_type_wall, R.string.map_type_wall, MapView.LayerType.WALL, mViewHolder.legend);
-        initLegendItem(R.id.legend_3, R.color.map_flag_climb, R.string.map_flag_climb, MapView.LayerType.CLIMBABLE, mViewHolder.legend);
-        initLegendItem(R.id.legend_4, R.color.map_flag_wallsneak, R.string.map_flag_wallsneak, MapView.LayerType.WALL_SNEAK, mViewHolder.legend);
-        initLegendItem(R.id.legend_5, R.color.map_flag_abyss, R.string.map_flag_abyss, MapView.LayerType.LOW_CEILING, mViewHolder.legend);
-        initLegendItem(R.id.legend_6, R.color.map_flag_wallfollow, R.string.map_flag_wallfollow, MapView.LayerType.WALL_FOLLOWING, mViewHolder.legend);
-        initLegendItem(R.id.legend_7, R.color.map_flag_collidable, R.string.map_flag_collidable, MapView.LayerType.COLLISION, mViewHolder.legend);
-        initLegendItem(R.id.legend_8, R.color.map_flag_slow, R.string.map_flag_slow, MapView.LayerType.SLOW, mViewHolder.legend);
-        initLegendItem(R.id.legend_9, R.color.map_blocks, R.string.map_blocks, MapView.LayerType.BLOCK, mViewHolder.legend);
+        initLegendItem(R.id.legend_1, R.color.map_type_wall, R.string.map_type_wall, MapView.LayerType.FLOOR, mViewHolder.legend);
+
+        initLegendItem(R.id.legend_2, R.color.map_flag_bump, R.string.map_flag_bump, MapView.LayerType.BUMP, mViewHolder.legend);
+        initLegendItem(R.id.legend_3, R.color.map_flag_abyss, R.string.map_flag_abyss, MapView.LayerType.ABYSS, mViewHolder.legend);
+        initLegendItem(R.id.legend_4, R.color.map_flag_bump_abyss, R.string.map_flag_bump_abyss, MapView.LayerType.BUMP_ABYSS, mViewHolder.legend);
+        initLegendItem(R.id.legend_5, R.color.map_flag_sneak, R.string.map_flag_sneak, MapView.LayerType.SNEAKING, mViewHolder.legend);
+        initLegendItem(R.id.legend_6, R.color.map_flag_screw, R.string.map_flag_screw, MapView.LayerType.SCREWING, mViewHolder.legend);
+        initLegendItem(R.id.legend_7, R.color.map_flag_move_object, R.string.map_flag_move_object, MapView.LayerType.MOVE_OBJECT, mViewHolder.legend);
+        initLegendItem(R.id.legend_8, R.color.map_flag_fight, R.string.map_flag_fight, MapView.LayerType.FIGHT, mViewHolder.legend);
+        initLegendItem(R.id.legend_9, R.color.map_flag_undetermined, R.string.map_flag_undetermined, MapView.LayerType.UNDETERMINED, mViewHolder.legend);
+
+        initLegendItem(R.id.legend_10, R.color.map_blocks, R.string.map_blocks, MapView.LayerType.BLOCK, mViewHolder.legend);
 
         // FIXME: DIRTY HACK BECAUSE MAP WONT SHOW WHEN ACTIVITY IS RESUMED ... I HATE ANDROID FRAGMENT PERSISTENCE AND LIFECYLCE
         new Handler().postDelayed(new Runnable() {

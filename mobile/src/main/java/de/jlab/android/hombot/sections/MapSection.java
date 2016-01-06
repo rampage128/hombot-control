@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -106,7 +105,7 @@ public class MapSection extends SectionFragment {
         mViewHolder.legend.setVisibility(View.GONE);
 
         initLegendItem(R.id.legend_0, R.color.map_type_floor, R.string.map_type_floor, MapView.LayerType.FLOOR, mViewHolder.legend);
-        initLegendItem(R.id.legend_1, R.color.map_type_wall, R.string.map_type_wall, MapView.LayerType.FLOOR, mViewHolder.legend);
+        initLegendItem(R.id.legend_1, R.color.map_type_wall, R.string.map_type_wall, MapView.LayerType.WALL, mViewHolder.legend);
 
         initLegendItem(R.id.legend_2, R.color.map_flag_bump, R.string.map_flag_bump, MapView.LayerType.BUMP, mViewHolder.legend);
         initLegendItem(R.id.legend_3, R.color.map_flag_abyss, R.string.map_flag_abyss, MapView.LayerType.ABYSS, mViewHolder.legend);

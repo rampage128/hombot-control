@@ -97,17 +97,6 @@ public class HttpRequestEngine extends RequestEngine {
             buf.order(ByteOrder.LITTLE_ENDIAN);
             HombotMap map = HombotMap.getInstance(buf);
             return map;
-            /*
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader r = new BufferedReader(new InputStreamReader(in));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line).append("\n");
-            }
-            urlConnection.disconnect();
-            return HombotMap.getInstance(total.toString());
-            */
         } catch (Exception e) {
             return null;
         }

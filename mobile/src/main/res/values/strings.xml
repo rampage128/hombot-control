@@ -24,14 +24,16 @@
 
     <string name="map_blocks">Blocks</string>
     <string name="map_type_floor">Floor</string>
-    <string name="map_type_carpet">Carpet?</string>
     <string name="map_type_wall">Wall</string>
-    <string name="map_flag_climb">Climbable object?</string>
-    <string name="map_flag_wallsneak">Sneak wall</string>
+
+    <string name="map_flag_bump">Bump</string>
+    <string name="map_flag_bump_abyss">Bump abyss</string>
     <string name="map_flag_abyss">Abyss</string>
-    <string name="map_flag_wallfollow">Follow wall</string>
-    <string name="map_flag_collidable">Collidable?</string>
-    <string name="map_flag_slow">Slow movement</string>
+    <string name="map_flag_sneak">Sneak</string>
+    <string name="map_flag_screw">Screw</string>
+    <string name="map_flag_move_object">Move object</string>
+    <string name="map_flag_fight">Fight</string>
+    <string name="map_flag_undetermined">Undetermined</string>
 
     <string name="command_turbo">Turbo</string>
     <string name="command_mode">Mode</string>

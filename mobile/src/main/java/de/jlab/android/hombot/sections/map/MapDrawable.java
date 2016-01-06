@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import de.jlab.android.hombot.common.core.HombotMap;
 
@@ -13,16 +14,21 @@ import de.jlab.android.hombot.common.core.HombotMap;
 public class MapDrawable {
     public ArrayList<BlockDrawable> blocks = new ArrayList<>();
 
-    public ArrayList<CellDrawable> floorCells = new ArrayList<>();
-    public ArrayList<CellDrawable> carpetCells = new ArrayList<>();
-    public ArrayList<CellDrawable> wallCells = new ArrayList<>();
-    public ArrayList<CellDrawable> inaccessibleCells = new ArrayList<>();
-    public ArrayList<CellDrawable> climbCells = new ArrayList<>();
-    public ArrayList<CellDrawable> wallSneakCells = new ArrayList<>();
-    public ArrayList<CellDrawable> lowCeilingCells = new ArrayList<>();
-    public ArrayList<CellDrawable> wallFollowingCells = new ArrayList<>();
-    public ArrayList<CellDrawable> collisionCells = new ArrayList<>();
-    public ArrayList<CellDrawable> slowCells = new ArrayList<>();
+    public enum CellType {
+        ABYSS,
+        BUMP,
+        BUMP_ABYSS,
+        FIGHT,
+        FLOOR,
+        MOVE_OBJECT,
+        SNEAKING,
+        SCREWING,
+        UNDETERMINED,
+        VOID,
+        WALL
+    }
+
+    private LinkedHashMap<CellType, ArrayList<CellDrawable>> cellMap = new LinkedHashMap<>();
 
     public static MapDrawable convert(HombotMap map) {
         int x = 0, y = 0;
@@ -48,37 +54,55 @@ public class MapDrawable {
                 // INTERPRET THE MAP AND CREATE ARRAYLISTS BASED ON INTERPRETATION
 
                 if (HombotMap.Cell.FloorType.NORMAL == cell.getFloorType()) {
-                    md.floorCells.add(cd);
+                    md.addCell(CellType.FLOOR, cd);
                 } else if (HombotMap.Cell.FloorType.CARPET == cell.getFloorType()) {
-                    md.carpetCells.add(cd);
+                    md.addCell(CellType.UNDETERMINED, cd);
                 } else if (HombotMap.Cell.FloorType.WALL == cell.getFloorType()) {
-                    md.wallCells.add(cd);
+                    md.addCell(CellType.WALL, cd);
                 } else if (HombotMap.Cell.FloorType.INACCESSIBLE == cell.getFloorType()) {
-                    md.inaccessibleCells.add(cd);
+                    md.addCell(CellType.VOID, cd);
                 }
 
-                if (cell.isClimbable()) {
-                    md.climbCells.add(cd);
+                boolean isMoveObject = cell.isSneaking() && cell.isScrewing();
+
+                if (cell.isSneaking()) {
+                    md.addCell(CellType.SNEAKING, cd);
                 }
-                if (cell.isWallSneak()) {
-                    md.wallSneakCells.add(cd);
+                if (cell.isScrewing()) {
+                    md.addCell(CellType.SCREWING, cd);
                 }
-                if (cell.isLowCeiling()) {
-                    md.lowCeilingCells.add(cd);
+                if (cell.isAbyss() && (cell.isScrewing() || isMoveObject)) {
+                    md.addCell(CellType.FIGHT, cd);
+                } else if (cell.isCollision() && cell.isAbyss()) {
+                    md.addCell(CellType.BUMP_ABYSS, cd);
+                } else {
+                    if (cell.isAbyss()) {
+                        md.addCell(CellType.ABYSS, cd);
+                    }
+                    if (cell.isCollision()) {
+                        md.addCell(CellType.BUMP, cd);
+                    }
                 }
-                if (cell.isWallFollowing()) {
-                    md.wallFollowingCells.add(cd);
-                }
-                if (cell.isCollision()) {
-                    md.collisionCells.add(cd);
-                }
-                if (cell.isSlow()) {
-                    md.slowCells.add(cd);
+                if (isMoveObject) {
+                    md.addCell(CellType.MOVE_OBJECT, cd);
                 }
             }
         }
 
         return md;
+    }
+
+    public ArrayList<CellDrawable> getCells(CellType type) {
+        return this.cellMap.get(type);
+    }
+
+    private void addCell(CellType type, CellDrawable drawable) {
+        ArrayList<CellDrawable> cellList = this.cellMap.get(type);
+        if (cellList == null) {
+            cellList = new ArrayList<>();
+            this.cellMap.put(type, cellList);
+        }
+        cellList.add(drawable);
     }
 
     public static class BlockDrawable implements MapDrawableItem {

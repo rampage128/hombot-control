@@ -21,9 +21,18 @@ import de.jlab.android.hombot.common.core.HombotMap;
 public class MapView extends View {
 
     public enum LayerType {
-        FLOOR, CARPET, WALL,
-        CLIMBABLE, WALL_SNEAK, LOW_CEILING, WALL_FOLLOWING, COLLISION, SLOW,
-        BLOCK
+        ABYSS,
+        BLOCK,
+        BUMP,
+        BUMP_ABYSS,
+        FIGHT,
+        FLOOR,
+        MOVE_OBJECT,
+        SNEAKING,
+        SCREWING,
+        UNDETERMINED,
+        VOID,
+        WALL
     }
 
     private MapDrawable mMap;
@@ -94,19 +103,18 @@ public class MapView extends View {
             @Override
             public void run() {
                 // RENDER FLOOR
-                setLayer(LayerType.FLOOR, mMap.floorCells, getContext().getResources().getColor(R.color.map_type_floor));
-                setLayer(LayerType.CARPET, mMap.carpetCells, getContext().getResources().getColor(R.color.map_type_carpet));
-                setLayer(LayerType.WALL, mMap.wallCells, getContext().getResources().getColor(R.color.map_type_wall));
+                setLayer(LayerType.FLOOR, mMap.getCells(MapDrawable.CellType.FLOOR), getContext().getResources().getColor(R.color.map_type_floor));
+                setLayer(LayerType.WALL, mMap.getCells(MapDrawable.CellType.WALL), getContext().getResources().getColor(R.color.map_type_wall));
 
                 // RENDER ADDITIONAL INFO
-
-                setLayer(LayerType.WALL_SNEAK, mMap.wallSneakCells, getContext().getResources().getColor(R.color.map_flag_wallsneak));
-                setLayer(LayerType.WALL_FOLLOWING, mMap.wallFollowingCells, getContext().getResources().getColor(R.color.map_flag_wallfollow));
-                setLayer(LayerType.COLLISION, mMap.collisionCells, getContext().getResources().getColor(R.color.map_flag_collidable));
-                setLayer(LayerType.SLOW, mMap.slowCells, getContext().getResources().getColor(R.color.map_flag_slow));
-
-                setLayer(LayerType.LOW_CEILING, mMap.lowCeilingCells, getContext().getResources().getColor(R.color.map_flag_abyss));
-                setLayer(LayerType.CLIMBABLE, mMap.climbCells, getContext().getResources().getColor(R.color.map_flag_climb));
+                setLayer(LayerType.SNEAKING, mMap.getCells(MapDrawable.CellType.SNEAKING), getContext().getResources().getColor(R.color.map_flag_sneak));
+                setLayer(LayerType.SCREWING, mMap.getCells(MapDrawable.CellType.SCREWING), getContext().getResources().getColor(R.color.map_flag_screw));
+                setLayer(LayerType.BUMP, mMap.getCells(MapDrawable.CellType.BUMP), getContext().getResources().getColor(R.color.map_flag_bump));
+                setLayer(LayerType.ABYSS, mMap.getCells(MapDrawable.CellType.ABYSS), getContext().getResources().getColor(R.color.map_flag_abyss));
+                setLayer(LayerType.BUMP_ABYSS, mMap.getCells(MapDrawable.CellType.ABYSS), getContext().getResources().getColor(R.color.map_flag_bump_abyss));
+                setLayer(LayerType.MOVE_OBJECT, mMap.getCells(MapDrawable.CellType.MOVE_OBJECT), getContext().getResources().getColor(R.color.map_flag_move_object));
+                setLayer(LayerType.FIGHT, mMap.getCells(MapDrawable.CellType.FIGHT), getContext().getResources().getColor(R.color.map_flag_fight));
+                setLayer(LayerType.UNDETERMINED, mMap.getCells(MapDrawable.CellType.FIGHT), getContext().getResources().getColor(R.color.map_flag_undetermined));
 
                 // RENDER GRID
                 setLayer(LayerType.BLOCK, mMap.blocks, Color.DKGRAY);

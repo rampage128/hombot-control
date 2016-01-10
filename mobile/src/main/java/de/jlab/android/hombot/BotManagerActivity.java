@@ -140,6 +140,10 @@ public class BotManagerActivity extends AppCompatActivity implements EditBotDial
         HombotDataOpenHelper dataHelper = new HombotDataOpenHelper(this);
         SQLiteDatabase db = dataHelper.getWritableDatabase();
 
+        if (address.indexOf(":") < 0) {
+            address += ":6260";
+        }
+
         ContentValues values = new ContentValues();
         values.put(HombotDataContract.BotEntry.COLUMN_NAME_NAME, name);
         values.put(HombotDataContract.BotEntry.COLUMN_NAME_ADDRESS, address);

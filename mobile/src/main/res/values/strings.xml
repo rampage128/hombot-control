@@ -15,8 +15,8 @@
     <string name="section_schedule">Schedule</string>
     <string name="section_map">Map</string>
 
-    <string name="bot_name">Bot Name</string>
-    <string name="bot_address">Bot Address</string>
+    <string name="bot_name">Bot name</string>
+    <string name="bot_address">Bot address and port</string>
 
     <string name="bot_select">Select Bot</string>
     <string name="bot_edit">Edit bot</string>

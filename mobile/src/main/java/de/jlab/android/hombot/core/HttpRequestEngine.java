@@ -2,6 +2,7 @@ package de.jlab.android.hombot.core;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -51,8 +52,13 @@ public class HttpRequestEngine extends RequestEngine {
     public void requestStatus(RequestListener listener) {
         String statusString = null;
         try {
-            URL statusUrl = new URL("http://" + mBotAddress + "/status.txt");
+            URL statusUrl = new URL(mBotAddress + "/status.txt");
             HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+            String userInfo = statusUrl.getUserInfo();
+            if (userInfo != null) {
+                String basicAuth = "Basic " + Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP);
+                urlConnection.setRequestProperty ("Authorization", basicAuth);
+            }
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader r = new BufferedReader(new InputStreamReader(in));
             StringBuilder total = new StringBuilder();
@@ -81,8 +87,13 @@ public class HttpRequestEngine extends RequestEngine {
         }
 
         try {
-            URL statusUrl = new URL("http://" + mBotAddress + "/" + mapLocation);
+            URL statusUrl = new URL(mBotAddress + "/" + mapLocation);
             HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+            String userInfo = statusUrl.getUserInfo();
+            if (userInfo != null) {
+                String basicAuth = "Basic " + Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP);
+                urlConnection.setRequestProperty ("Authorization", basicAuth);
+            }
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -110,8 +121,13 @@ public class HttpRequestEngine extends RequestEngine {
         }
         String statusString = null;
         try {
-            URL statusUrl = new URL("http://" + mBotAddress + "/cleandata.html");
+            URL statusUrl = new URL(mBotAddress + "/cleandata.html");
             HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+            String userInfo = statusUrl.getUserInfo();
+            if (userInfo != null) {
+                String basicAuth = "Basic " + Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP);
+                urlConnection.setRequestProperty ("Authorization", basicAuth);
+            }
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader r = new BufferedReader(new InputStreamReader(in));
             StringBuilder total = new StringBuilder();
@@ -141,8 +157,13 @@ public class HttpRequestEngine extends RequestEngine {
     @Override
     public HombotSchedule requestSchedule() {
         try {
-            URL statusUrl = new URL("http://" + mBotAddress + "/timer.txt");
+            URL statusUrl = new URL(mBotAddress + "/timer.txt");
             HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+            String userInfo = statusUrl.getUserInfo();
+            if (userInfo != null) {
+                String basicAuth = "Basic " + Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP);
+                urlConnection.setRequestProperty ("Authorization", basicAuth);
+            }
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader r = new BufferedReader(new InputStreamReader(in));
             StringBuilder total = new StringBuilder();
@@ -163,8 +184,13 @@ public class HttpRequestEngine extends RequestEngine {
 
             public void run() {
                 try {
-                    URL statusUrl = new URL("http://" + mBotAddress + "/sites/schedule.html?" + schedule.getCommandString());
+                    URL statusUrl = new URL(mBotAddress + "/sites/schedule.html?" + schedule.getCommandString());
                     HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+                    String userInfo = statusUrl.getUserInfo();
+                    if (userInfo != null) {
+                        String basicAuth = "Basic " + Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP);
+                        urlConnection.setRequestProperty ("Authorization", basicAuth);
+                    }
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                             /*
                             BufferedReader r = new BufferedReader(new InputStreamReader(in));
@@ -187,8 +213,13 @@ public class HttpRequestEngine extends RequestEngine {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    URL statusUrl = new URL("http://" + mBotAddress + "/json.cgi?" + commandString);
+                    URL statusUrl = new URL(mBotAddress + "/json.cgi?" + commandString);
                     HttpURLConnection urlConnection = (HttpURLConnection) statusUrl.openConnection();
+                    String userInfo = statusUrl.getUserInfo();
+                    if (userInfo != null) {
+                        String basicAuth = "Basic " + Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP);
+                        urlConnection.setRequestProperty ("Authorization", basicAuth);
+                    }
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                             /*
                             BufferedReader r = new BufferedReader(new InputStreamReader(in));
@@ -205,6 +236,9 @@ public class HttpRequestEngine extends RequestEngine {
     }
 
     public void setBotAddress(String address) {
+        if (!address.contains("://")) {
+            address = "http://" + address;
+        }
         this.mBotAddress = address;
         if (getListener() != null) {
             getListener().statusUpdate(HombotStatus.getInstance(null, null));

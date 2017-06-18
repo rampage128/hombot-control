@@ -7,14 +7,20 @@ For further information on the WIFI-hack: See http://www.roboter-forum.com/showt
 
 For simple hack-instructions visit: http://www.roboter-forum.com/showthread.php?10009-LG-Hombot-3-0-WLAN-Steuerung-per-Weboberfl%E4che
 
-##External Libraries
+## External Libraries
 
 This project uses the following external libraries:
 
 * [FloatingActionButton](https://github.com/futuresimple/android-floating-action-button) for implementation of expandable Floating Action Buttons
 * [Android Material Color Picker Dialog](https://github.com/Pes8/android-material-color-picker-dialog) for color picking in the settings
 
-##License
+## Support me
+
+If you like this or other of my projects, please feel free to support me using the Link below.
+
+[![Buy me a beer](https://img.shields.io/badge/buy%20me%20a%20beer-PayPal-green.svg)](https://www.paypal.me/FrederikWolter/1)
+
+## License
 
 Hombot Control | Android App to control LG-Hombot
 Copyright (C) 2015 Frederik Wolter
